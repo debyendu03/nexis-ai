@@ -45,7 +45,7 @@ export const useChatStore = create<ChatStore>((set) => ({
     set((state) => {
       const updateTheme: Theme = state.theme === 'lightTheme' ? 'darkTheme' : 'lightTheme';
       if (typeof window !== 'undefined') {
-        document.documentElement.classList.remove('light', 'dark');
+        document.documentElement.classList.remove('lightTheme', 'darkTheme');
         document.documentElement.classList.add(updateTheme);
         localStorage.setItem('nexis-theme', updateTheme);
       }

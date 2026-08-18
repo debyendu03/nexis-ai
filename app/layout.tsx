@@ -37,7 +37,7 @@ export default function RootLayout({children}: {children: React.ReactNode;}) {
         },
       }}
     >
-      <html lang="en" className="dark" suppressHydrationWarning>
+      <html lang="en" className="lighTheme" suppressHydrationWarning>
         <body
           className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-base text-content-primary antialiased selection:bg-accent/30 selection:text-white`}
         >
