@@ -8,7 +8,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   isLoading: false,
   isStreaming: false,
   isSidebarOpen: false,
-  theme: 'lightTheme', // Default theme
+  theme: 'light', // Default theme
 
   // Actions
   setConversations: (conversations: Conversation[]) => set({ conversations }),
@@ -43,9 +43,9 @@ export const useChatStore = create<ChatStore>((set) => ({
 
   toggleTheme: () =>
     set((state) => {
-      const updateTheme: Theme = state.theme === 'lightTheme' ? 'darkTheme' : 'lightTheme';
+      const updateTheme: Theme = state.theme === 'light' ? 'dark' : 'light';
       if (typeof window !== 'undefined') {
-        document.documentElement.classList.remove('lightTheme', 'darkTheme');
+        document.documentElement.classList.remove('light', 'dark');
         document.documentElement.classList.add(updateTheme);
         localStorage.setItem('nexis-theme', updateTheme);
       }

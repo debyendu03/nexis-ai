@@ -1,6 +1,6 @@
 export type Role = "user" | "assistant";
 
-export type Theme = "lightTheme" | "darkTheme";
+export type Theme = "light" | "dark";
 
 export interface Message {
   id: string;
