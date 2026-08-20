@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
-import { Navbar } from '@/components/Navbar';
+// import { Navbar } from '@/components/Navbar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,7 +30,8 @@ export default function RootLayout({children}: {children: React.ReactNode;}) {
       <html lang="en" className="light" suppressHydrationWarning>
         <body
           className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-base text-content-primary antialiased selection:bg-accent/30 selection:text-white`}
-        ><Navbar/>
+        >
+          {/* <Navbar /> */}
           {children}
         </body>
       </html>
