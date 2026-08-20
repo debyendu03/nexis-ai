@@ -27,7 +27,21 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode;}) {
   return (
     <ClerkProvider>
-      <html lang="en" className="light" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                try {
+                  var theme = localStorage.getItem('nexis-theme') || 'light';
+                  document.documentElement.className = theme;
+                } catch(e) {
+                  document.documentElement.className = 'light';
+                }
+              `,
+            }}
+          />
+        </head>
         <body
           className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-base text-content-primary antialiased selection:bg-accent/30 selection:text-white`}
         >
