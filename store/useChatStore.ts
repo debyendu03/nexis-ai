@@ -7,8 +7,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   activeConversationId: null,
   isLoading: false,
   isStreaming: false,
-  isSidebarOpen: true,
-  theme: 'light', // Default theme
+  
 
   // Actions
   setConversations: (conversations: Conversation[]) => set({ conversations }),
@@ -36,20 +35,5 @@ export const useChatStore = create<ChatStore>((set) => ({
   setLoading: (isLoading: boolean) => set({ isLoading }),
 
   setStreaming: (isStreaming: boolean) => set({ isStreaming }),
-
-  toggleSidebar: () =>set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
-
-  setSidebarOpen: (isOpen: boolean) => set({ isSidebarOpen: isOpen }),
-
-  toggleTheme: () =>
-    set((state) => {
-      const updateTheme: Theme = state.theme === 'light' ? 'dark' : 'light';
-      if (typeof window !== 'undefined') {
-        document.documentElement.classList.remove('light', 'dark');
-        document.documentElement.classList.add(updateTheme);
-        localStorage.setItem('nexis-theme', updateTheme);
-      }
-      return { theme: updateTheme };
-    }),
 
 }));
