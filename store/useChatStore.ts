@@ -7,7 +7,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   activeConversationId: null,
   isLoading: false,
   isStreaming: false,
-  isSidebarOpen: false,
+  isSidebarOpen: true,
   theme: 'light', // Default theme
 
   // Actions
