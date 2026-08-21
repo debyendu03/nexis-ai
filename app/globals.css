@@ -91,3 +91,6 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
 }
+html {
+  font-size: clamp(12px, 0.875rem + 0.2vw, 20px);
+}
