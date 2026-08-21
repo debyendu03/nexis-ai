@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useShallow } from "zustand/react/shallow";
 import { useChatStore } from "@/store/useChatStore";
-import { Message, Conversation } from "@/types";
+import { Message } from "@/types";
 import {
   createConversation,
   saveMessage,
@@ -24,7 +25,17 @@ export function useChat() {
     setLoading,
     isStreaming,
     setStreaming,
-  } = useChatStore();
+  } = useChatStore(
+    useShallow((state) => ({
+      activeConversationId: state.activeConversationId,
+      setActiveConversation: state.setActiveConversation,
+      addConversation: state.addConversation,
+      isLoading: state.isLoading,
+      setLoading: state.setLoading,
+      isStreaming: state.isStreaming,
+      setStreaming: state.setStreaming,
+    })),
+  );
 
   /* Helper to get and increment guest message count */
   const checkGuestLimit = useCallback((): boolean => {
