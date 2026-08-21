@@ -86,7 +86,7 @@ export function useChat() {
         if (isSignedIn && user && !currentConversationId) {
           // Generate title from first 30 chars of the prompt
           const initialTitle =
-            content.length > 30 ? `${content.substring(0, 30)}...` : content;
+            content.length > 30 ? `${content.substring(0, 45)}...` : content;
 
           const newConv = await createConversation(user.id, initialTitle);
           if (newConv) {
