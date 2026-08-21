@@ -5,6 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 const apiKey = process.env.GEMINI_API_KEY || "";
 const genAI = new GoogleGenerativeAI(apiKey);
 
+//select model 
+const MODEL = "gemini-3.1-flash-lite"
+
 //Nexis Core System Instructions (Persona & Constraints)
 const SYSTEM_INSTRUCTION = `
 You are Nexis, an intelligent, minimal, and highly capable AI companion.
@@ -38,7 +41,7 @@ export async function   POST(req: NextRequest) {
 
     // Initialize Gemini model
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: MODEL,
       systemInstruction: SYSTEM_INSTRUCTION,
     });
 
