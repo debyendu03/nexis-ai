@@ -9,6 +9,7 @@
   --color-base: var(--bg-base);
   --color-sidebar: var(--bg-sidebar);
   --color-surface: var(--bg-surface);
+  --color-elevated: var(--bg-elevated);
   --color-surface-hover: var(--bg-hover);
   --color-border: var(--border);
 
@@ -37,7 +38,7 @@
   --bg-surface: #e5e3e8;
   --bg-elevated: #f0eff4;
   --bg-hover: #ece9fc;
-  --border: #c8c7ca;
+  --border: #d8d8da;
 
   --text-primary: #111118;
   --text-secondary: #595a5e;
