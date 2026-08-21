@@ -1,7 +1,5 @@
 export type Role = "user" | "assistant";
 
-export type Theme = "light" | "dark";
-
 export interface Message {
   id: string;
   conversation_id: string;
@@ -26,8 +24,6 @@ export interface ChatStore {
   activeConversationId: string | null;
   isLoading: boolean;
   isStreaming: boolean;
-  isSidebarOpen: boolean;
-  theme: Theme;
 
   // Actions
   setConversations: (conversations: Conversation[]) => void;
@@ -37,7 +33,15 @@ export interface ChatStore {
   deleteConversation: (id: string) => void;
   setLoading: (loading: boolean) => void;
   setStreaming: (streaming: boolean) => void;
+}
+
+export type Theme = "light" | "dark";
+
+export interface UIStore {
+  isSidebarOpen: boolean;
+  theme: Theme;
+
+  // Actions
   toggleSidebar: () => void;
-  setSidebarOpen: (isOpen: boolean) => void;
   toggleTheme: () => void;
 }
