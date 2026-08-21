@@ -5,6 +5,7 @@ import { Message, Conversation } from "@/types";
 import {
   createConversation,
   saveMessage,
+  getMessages,   
 } from "@/lib/supabase";
 
 const GUEST_LIMIT = 3;
@@ -29,7 +30,10 @@ export function useChat() {
   const checkGuestLimit = useCallback((): boolean => {
     if (isSignedIn) return true;
 
-    const count = parseInt(sessionStorage.getItem(GUEST_STORAGE_KEY) || "0", 10);
+    const count = parseInt(
+      sessionStorage.getItem(GUEST_STORAGE_KEY) || "0",
+      10,
+    );
     if (count > GUEST_LIMIT) {
       setShowAuthModal(true);
       return false;
@@ -38,6 +42,16 @@ export function useChat() {
     sessionStorage.setItem(GUEST_STORAGE_KEY, (count + 1).toString());
     return true;
   }, [isSignedIn]);
+
+  // Load messages for a conversation from Supabase 
+  const loadMessages = useCallback(
+    async (conversationId: string) => {
+      if (!isSignedIn || !conversationId) return;
+      const data = await getMessages(conversationId);
+      setMessages(data);
+    },
+    [isSignedIn],
+  );
 
   /* Send Message & Handle Gemini Stream */
   const sendMessage = useCallback(
@@ -183,6 +197,7 @@ export function useChat() {
     messages,
     setMessages,
     sendMessage,
+    loadMessages, 
     isLoading,
     isStreaming,
     showAuthModal,
