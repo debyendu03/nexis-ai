@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useShallow } from "zustand/react/shallow";
 import clsx from "clsx";
 
 import { useChatStore } from "@/store/useChatStore";
@@ -31,17 +30,7 @@ export function Sidebar() {
   const setActiveConversation = useChatStore(
     (state) => state.setActiveConversation,
   );
-
-  const { isSidebarOpen, theme, toggleSidebar, toggleTheme } = useUIStore(
-    useShallow((state) => ({
-      isSidebarOpen: state.isSidebarOpen,
-      theme: state.theme,
-      toggleSidebar: state.toggleSidebar,
-      toggleTheme: state.toggleTheme,
-    })),
-  );
-
-  const isDark = theme === "dark";
+  const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
 
   const currentId = (params?.id as string) || activeConversationId;
 
