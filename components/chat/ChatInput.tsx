@@ -45,7 +45,7 @@ export function ChatInput({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 pb-0">
+    <div className="w-full max-w-4xl mx-auto px-4 bg-transparent">
       <form
         onSubmit={handleSubmit}
         className="relative flex flex-row bg-surface border border-border focus-within:border-accent/60 rounded-3xl p-3 ps-0 shadow-lg transition-all duration-200"
