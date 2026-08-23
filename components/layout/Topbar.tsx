@@ -1,19 +1,28 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useUIStore } from "@/store/useUIStore";
 import { useChatStore } from "@/store/useChatStore";
 import { Menu } from "lucide-react";
+import { useConversations } from "@/hooks/useConversations";
+import clsx from "clsx"
 
 export function Topbar() {
+  const { renameConversation } = useConversations();
+
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 
   const conversations = useChatStore((state) => state.conversations);
-  const activeConversationId = useChatStore(
-    (state) => state.activeConversationId,
-  );
-  const activeTitle =
-    conversations.find((c) => c.id === activeConversationId)?.title || null;
+  const activeConversationId = useChatStore((state) => state.activeConversationId);
+  const activeTitle = conversations.find((c) => c.id === activeConversationId)?.title || null;
+
+  const handleRename = () => {
+    if (!activeConversationId || !activeTitle) return;
+
+    const nextTitle = window.prompt("Rename conversation", activeTitle)?.trim();
+    if (nextTitle && nextTitle !== activeTitle) {
+      renameConversation(activeConversationId, nextTitle);
+    }
+  };
 
   return (
     <header className="h-14 px-4 flex items-center justify-between absolute top-0 left-0 w-full z-10 bg-transparent">
@@ -29,21 +38,37 @@ export function Topbar() {
 
         {/* title pill on desktop*/}
         {activeTitle && (
-          <div className="hidden md:flex items-center px-3 py-1.5 rounded-xl bg-surface border border-border">
+          <button
+            type="button"
+            onClick={handleRename}
+            className={clsx(
+              "hidden md:flex items-center px-3 py-1.5 rounded-xl bg-surface transition-colors cursor-pointer border border-border",
+              "hover:hover:bg-elevated"
+            )}
+            aria-label="Rename conversation"
+          >
             <span className="text-sm font-semibold text-content-primary truncate max-w-[300px]">
               {activeTitle}
             </span>
-          </div>
+          </button>
         )}
       </div>
 
       {/*title pill on mobile */}
       {activeTitle && (
-        <div className="md:hidden absolute left-1/2 -translate-x-1/2 flex items-center px-3 py-1.5 rounded-xl bg-surface border border-border">
+        <button
+          type="button"
+          onClick={handleRename}
+          className={clsx(
+            "md:hidden absolute left-1/2 -translate-x-1/2 flex items-center px-3 py-1.5 rounded-xl bg-surface transition-colors cursor-pointer border border-border",
+            "hover:bg-elevated"
+          )}
+          aria-label="Rename conversation"
+        >
           <span className="text-sm font-semibold text-content-primary truncate max-w-[160px]">
             {activeTitle}
           </span>
-        </div>
+        </button>
       )}
 
       {/* RIGHT — future buttons */}
