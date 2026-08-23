@@ -11,21 +11,26 @@ export function useConversations() {
   const { user, isSignedIn } = useUser();
 
   // Zustand selectors
-  const conversations = useChatStore((state) => state.conversations);
-  const setConversations = useChatStore((state) => state.setConversations);
-
-  const deleteConversation = useChatStore((state) => state.deleteConversation);
-
-  const updateConversationTitle = useChatStore(
-    (state) => state.updateConversationTitle,
-  );
-
-  const setActiveConversation = useChatStore(
-    (state) => state.setActiveConversation,
-  );
-
-  const activeConversationId = useChatStore(
-    (state) => state.activeConversationId,
+  const {
+    conversations,
+    setConversations,
+    deleteConversation,
+    updateConversationTitle,
+    setActiveConversation,
+    activeConversationId,
+    isLoading,
+    setLoading,
+  } = useChatStore(
+    useShallow((state) => ({
+      conversations: state.conversations,
+      setConversations: state.setConversations,
+      deleteConversation: state.deleteConversation,
+      updateConversationTitle: state.updateConversationTitle,
+      setActiveConversation: state.setActiveConversation,
+      activeConversationId: state.activeConversationId,
+      isLoading: state.isLoading,
+      setLoading: state.setLoading,
+    })),
   );
 
   // Fetch all conversations from Supabase + sync to store
