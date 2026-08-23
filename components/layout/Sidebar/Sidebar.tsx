@@ -68,7 +68,9 @@ export function Sidebar() {
       className={clsx(
         "h-screen bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
         "transition-[width] duration-300 ease-in-out",
-        isSidebarOpen ? "min-w-[100px] w-[30%] max-w-[320px]" : "w-14",
+        isSidebarOpen
+          ? "fixed inset-y-0 left-0 z-40 w-[80%] max-w-[320px] md:relative md:z-30 md:w-[30%]"
+          : "hidden md:flex md:w-14",
       )}
     >
       <div className="h-full flex flex-col justify-between gap-3 pt-5">
@@ -79,7 +81,7 @@ export function Sidebar() {
             isSidebarOpen ? "px-4" : "px-1",
           )}
         >
-          <div className="pb-1">  
+          <div className="pb-1">
             <SidebarHeader />
           </div>
 
@@ -98,7 +100,7 @@ export function Sidebar() {
         />
 
         {/* User */}
-        <SidebarUser/>
+        <SidebarUser />
       </div>
     </aside>
   );
