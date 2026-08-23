@@ -43,7 +43,7 @@ export function Topbar() {
             onClick={handleRename}
             className={clsx(
               "hidden md:flex items-center px-3 py-1.5 rounded-xl bg-surface transition-colors cursor-pointer border border-border",
-              "hover:hover:bg-elevated"
+              "hover:bg-elevated"
             )}
             aria-label="Rename conversation"
           >
