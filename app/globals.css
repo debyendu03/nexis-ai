@@ -29,16 +29,26 @@
 
   /* ── Shadows ── */
   --shadow-accent-glow: 0 0 20px -3px rgba(139, 124, 248, 0.25);
+
+  /* Code block */
+  --color-code-bg: var(--code-bg);
+  --color-code-border: var(--code-border);
+  --color-code-header-bg: var(--code-header-bg);
 }
 
 /* ── Theme tokens ── */
-:root, .light {
+:root,
+.light {
   --bg-base: #f5f4fa;
   --bg-sidebar: #fefefe;
   --bg-surface: #e5e3e8;
   --bg-elevated: #f0eff4;
   --bg-hover: #ece9fc;
   --border: #d8d8da;
+
+  --code-bg: #2d2d3a;
+  --code-border: #3d3d4e;
+  --code-header-bg: #38384a;
 
   --text-primary: #111118;
   --text-secondary: #595a5e;
@@ -65,6 +75,10 @@
   --bg-hover: #2b2934;
   --border: #3c3c41;
 
+  --code-bg: #0f0f14;
+  --code-border: #2a2a35;
+  --code-header-bg: #1a1a22;
+
   --text-primary: #feffff;
   --text-secondary: #93939b;
   --text-muted: #8d9099;
@@ -90,6 +104,14 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  font-family: var(--font-inter), sans-serif;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-jetbrains-mono), monospace;
 }
 
 html,
