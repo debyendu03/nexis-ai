@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useShallow } from "zustand/react/shallow";
 import { useChatStore } from "@/store/useChatStore";
 import {
   getConversations,
@@ -36,10 +37,15 @@ export function useConversations() {
   // Fetch all conversations from Supabase + sync to store
   const fetchConversations = useCallback(async () => {
     if (!isSignedIn || !user) return;
-    const data = await getConversations(user.id);
-    setConversations(data);
+    setLoading(true);
+    try {
+      const data = await getConversations(user.id);
+      setConversations(data);
+    } finally {
+      setLoading(false);
+    }
   }, [isSignedIn, user, setConversations]);
-
+  
   //Delete conversation from DB + remove from local store
   const removeConversation = useCallback(
     async (conversationId: string) => {
@@ -77,6 +83,7 @@ export function useConversations() {
 
   return {
     conversations,
+    isLoading,
     activeConversationId,
     fetchConversations,
     removeConversation,
