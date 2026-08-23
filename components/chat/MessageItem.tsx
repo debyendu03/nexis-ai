@@ -1,18 +1,13 @@
 "use client";
 
 import { Message } from "@/types";
-import { User } from "lucide-react";
 import { MarkdownRenderer } from "./MarkdownRenderer";
 
 interface MessageItemProps {
   message: Message;
-  isStreaming?: boolean;
 }
 
-export function MessageItem({
-  message,
-  isStreaming = false,
-}: MessageItemProps) {
+export function MessageItem({ message }: MessageItemProps) {
   const isUser = message.role === "user";
 
   return (
@@ -29,9 +24,8 @@ export function MessageItem({
           </div>
         </div>
       ) : (
-        // ── Assistant Bubble── 
+        // ── Assistant Bubble──
         <div className="max-w-[100%]">
-
           <div className="py-4">
             {message.content ? (
               <MarkdownRenderer content={message.content} />
@@ -42,8 +36,8 @@ export function MessageItem({
                 <div className="w-2 h-2 rounded-full bg-accent animate-bounce [animation-delay:0.2s]" />
                 <div className="w-2 h-2 rounded-full bg-accent animate-bounce [animation-delay:0.4s]" />
               </div>
-            )} 
-          </div> 
+            )}
+          </div>
         </div>
       )}
     </div>
