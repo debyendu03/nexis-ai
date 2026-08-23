@@ -65,11 +65,11 @@ export function SidebarUser() {
 
         {isSidebarOpen && (
           <div className="flex flex-col min-w-0">
-            <span className="text-sm font-semibold text-content-primary truncate font-sans">
+            <span className="text-sm font-semibold text-content-primary truncate">
               {userName}
             </span>
 
-            <span className="text-xs text-content-muted font-sans">
+            <span className="text-xs text-content-muted">
               {userStatus}
             </span>
           </div>

@@ -38,7 +38,7 @@ export function SidebarSearch({ value, onChange }: SidebarSearchProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search chats"
-        className="w-full bg-transparent text-sm text-content-primary placeholder:text-content-muted focus:outline-none font-sans"
+        className="w-full bg-transparent text-sm text-content-primary placeholder:text-content-muted focus:outline-none"
       />
     </div>
   );
