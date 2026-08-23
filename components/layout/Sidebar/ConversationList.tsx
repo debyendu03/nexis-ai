@@ -34,7 +34,7 @@ export function ConversationList({
   }
   return (
     <>
-     <div className="px-4 pt-2 text-xs font-semibold text-content-muted tracking-widest uppercase font-sans">
+     <div className="px-4 pt-2 text-xs font-semibold text-content-muted tracking-widest uppercase  ">
         Recent
       </div>
     <div
