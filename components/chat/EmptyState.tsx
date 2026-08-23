@@ -1,11 +1,7 @@
 'use client';
 
 
-interface EmptyStateProps {
-  onSelectPrompt: (prompt: string) => void;
-}
-
-export function EmptyState({ onSelectPrompt }: EmptyStateProps) {
+export function EmptyState() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-3xl mx-auto w-full antialiased animate-fade-in">
       
