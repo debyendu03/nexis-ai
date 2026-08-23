@@ -2,20 +2,23 @@
 
 import { useState, useRef, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
+import { useChatStore } from "@/store/useChatStore";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
-  disabled?: boolean;
-  placeholder?: string;
 }
 
-export function ChatInput({
-  onSendMessage,
-  disabled = false,
-  placeholder = "Type your prompt or question here...",
-}: ChatInputProps) {
+export function ChatInput({onSendMessage}: ChatInputProps) {
   const [input, setInput] = useState("");
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Zustand chat state
+  const isLoading = useChatStore((state) => state.isLoading);
+  const isStreaming = useChatStore((state) => state.isStreaming);
+
+  const disabled = isLoading || isStreaming;
+  const placeholder = isStreaming ? "Nexis is thinking..." : "Ask Nexis anything...";
 
   useEffect(() => {
     if (textareaRef.current) {
