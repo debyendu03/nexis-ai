@@ -67,7 +67,7 @@ export function Sidebar() {
     <aside
       className={clsx(
         "h-screen bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
-        "transition-[width] duration-300 ease-in-out",
+        "transition-[width] duration-300 linear",
         isSidebarOpen
           ? "fixed inset-y-0 left-0 z-40 w-[80%] max-w-[320px] md:relative md:z-30 md:w-[30%]"
           : "hidden md:flex md:w-14",
