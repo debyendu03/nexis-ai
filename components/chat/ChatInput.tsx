@@ -58,7 +58,7 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
     <div className="w-full max-w-4xl mx-auto px-4 bg-transparent">
       <form
         onSubmit={handleSubmit}
-        className={clsx("relative flex flex-row bg-surface border border-border rounded-full p-3 ps-1  transition-all duration-200","  hover:shadow-lg hover:!border-accent", "focus-within:shadow-lg focus-within:!border-accent")}
+        className={clsx("relative flex flex-row bg-surface border border-border rounded-3xl p-3 ps-1  transition-all duration-200","  hover:shadow-lg hover:!border-accent", "focus-within:shadow-lg focus-within:!border-accent")}
       >
         <textarea
           ref={textareaRef}
