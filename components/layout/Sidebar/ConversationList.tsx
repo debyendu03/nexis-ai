@@ -61,10 +61,10 @@ export function ConversationList({
                 key={conv.id}
                 onClick={() => onSelect(conv.id)}
                 className={clsx(
-                  "group relative flex items-center justify-between px-2 py-2 rounded-xl text-sm cursor-pointer transition-all duration-150 text-content-primary",
+                  "group relative flex items-center justify-between px-2 py-2 rounded-xl text-sm cursor-pointer transition-all duration-150",
                   isActive
-                    ? "bg-surface font-medium"
-                    : "hover:font-medium hover:bg-surface",
+                    ? "bg-surface font-medium text-content-primary"
+                    : "hover:font-medium hover:bg-surface text-content-primary",
                 )}
               >
                 <div className="flex items-center gap-2 truncate">
