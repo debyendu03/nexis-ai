@@ -84,8 +84,8 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
             aria-label="Send message"
             className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-150 ${
               input.trim() && !disabled
-                ? "bg-accent text-white shadow-accent-glow hover:opacity-90 cursor-pointer"
-                : "bg-elevated border border-border text-content-muted cursor-not-allowed opacity-50"
+                ? "bg-accent text-white hover:shadow-accent-glow hover:opacity-90 cursor-pointer"
+                : "bg-elevated border border-border text-content-muted cursor-not-allowed"
             }`}
           >
             <ArrowUp className="w-4 h-4" />
