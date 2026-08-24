@@ -21,10 +21,10 @@ export function SidebarUser() {
 
   // Layout
   const containerClass = clsx(
-    "border-t border-border bg-sidebar shrink-0",
+    "border-t border-border shrink-0",
     isSidebarOpen
-      ? "p-4 flex items-center justify-between gap-2"
-      : "p-4 flex flex-col-reverse items-center gap-3",
+      ? "px-4 py-4 flex items-center justify-between gap-3"
+      : "px-1 py-4 flex flex-col-reverse items-center gap-3",
   );
 
   const userSectionClass = clsx(
@@ -32,13 +32,7 @@ export function SidebarUser() {
     isSidebarOpen ? "gap-2.5 overflow-hidden" : "justify-center",
   );
 
-  const themeButtonClass = clsx(
-    "bg-surface hover:bg-surface-hover border border-border",
-    "text-content-primary transition-colors cursor-pointer",
-    isSidebarOpen
-      ? "p-2 rounded-xl"
-      : "w-8 h-8 flex items-center justify-center rounded-xl",
-  );
+  const themeButtonClass = "text-content-primary transition-colors cursor-pointer w-8.5 h-8.5 p-2 rounded-xl flex items-center justify-center rounded-xl bg-elevated hover:bg-surface"
 
   // User information
   const userName = isSignedIn ? user?.fullName || "User" : "Guest Mode";
@@ -53,18 +47,18 @@ export function SidebarUser() {
           <UserButton
             appearance={{
               elements: {
-                userButtonAvatarBox: "w-8 h-8",
+                userButtonAvatarBox: "!w-8.5 !h-8.5",
               },
             }}
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-accent text-white font-bold flex items-center justify-center text-xs shrink-0">
+          <div className="!w-8.5 !h-8.5 rounded-full bg-accent text-white font-bold flex items-center justify-center text-xs shrink-0">
             NX
           </div>
         )}
 
         {isSidebarOpen && (
-          <div className="flex flex-col min-w-0">
+          <div className="flex flex-col min-w-0 gap-0 overflow-hidden whitespace-nowrap">
             <span className="text-sm font-semibold text-content-primary truncate">
               {userName}
             </span>
