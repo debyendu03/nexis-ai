@@ -15,7 +15,7 @@ export function NewChatButton({ onClick }: {onClick: () => void}) {
       title={!isSidebarOpen ? "New Chat" : undefined}
       aria-label="Start a new chat"
       className={clsx(
-        "rounded-xl bg-accent hover:opacity-80 hover:font-medium text-white flex items-center justify-center shadow-accent-glow transition-colors",
+        "rounded-xl bg-accent hover:opacity-80 hover:font-medium text-white flex items-center justify-center shadow-accent-glow transition-colors cursor-pointer",
         isSidebarOpen
           ? "w-full h-8.5 font-medium text-white gap-2"
           : "w-8.5 h-8.5 mx-auto px-0 gap-0"
