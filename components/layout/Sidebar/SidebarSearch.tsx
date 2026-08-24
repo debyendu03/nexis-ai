@@ -28,7 +28,7 @@ export function SidebarSearch({ value, onChange }: SidebarSearchProps) {
   return (
     <div
       className={clsx(
-        "flex items-center gap-2 py-[2.47%] px-3 rounded-xl bg-surface border border-border text-content-muted focus-within:ring-1 focus-within:ring-accent transition-colors",
+        "flex items-center gap-2 h-9 px-3 rounded-xl bg-base text-content-muted outline-1 outline-border","hover:outline-accent hover:text-content-primary","focus-within:text-content-primary focus-within:ring-1 focus-within:ring-accent focus-within:outline-transparent transition-colors ",
       )}
     >
       <Search className="w-3.5 h-3.5 shrink-0" />
@@ -38,7 +38,7 @@ export function SidebarSearch({ value, onChange }: SidebarSearchProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search chats"
-        className="w-full bg-transparent text-sm text-content-primary placeholder:text-content-muted focus:outline-none"
+        className="w-full text-sm text-content-primary placeholder:text-content-muted focus:outline-none"
       />
     </div>
   );
