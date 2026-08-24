@@ -39,10 +39,10 @@
 /* ── Theme tokens ── */
 :root,
 .light {
-  --bg-base: #f5f4fa;
-  --bg-sidebar: #fefefe;
-  --bg-surface: #e5e3e8;
-  --bg-elevated: #f0eff4;
+  --bg-base: #ffffff;
+  --bg-sidebar: #e7e7e7;
+  --bg-surface: #F5F5F5;
+  --bg-elevated: #DEDEDE;
   --bg-hover: #ece9fc;
   --border: #d8d8da;
 
@@ -51,15 +51,15 @@
   --code-header-bg: #38384a;
 
   --text-primary: #111118;
-  --text-secondary: #595a5e;
-  --text-muted: #6d6d77;
+  --text-secondary: #757575;
+  --text-muted: #62625B;
 
   --accent: #6d5de2;
   --accent-hover: #746a9f;
   --accent-border: #746a9f;
 
-  --user-bubble: #ede9fc;
-  --user-bubble-border: #c4b8f5;
+  --user-bubble: #e5e5e5;
+  --user-bubble-border: #d4d4d4;
   --user-text: #111118;
   --ai-text: #04050a;
 
@@ -71,7 +71,7 @@
   --bg-base: #141416;
   --bg-sidebar: #19181e;
   --bg-surface: #2c2d32;
-  --bg-elevated: #2b2a2f;
+  --bg-elevated: #373737;
   --bg-hover: #2b2934;
   --border: #3c3c41;
 
