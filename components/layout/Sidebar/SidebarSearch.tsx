@@ -18,7 +18,7 @@ export function SidebarSearch({ value, onChange }: SidebarSearchProps) {
       <button
         type="button"
         aria-label="Search chats"
-        className="flex items-center justify-center w-8 h-8 mx-auto rounded-xl cursor-pointer text-content-muted hover:bg-surface hover:text-content-primary transition-colors"
+        className="flex items-center justify-center w-8.5 h-8.5 mx-auto rounded-xl cursor-pointer text-content-muted hover:bg-surface hover:text-content-primary transition-colors"
       >
         <Search className="w-4 h-4" />
       </button>
@@ -28,7 +28,7 @@ export function SidebarSearch({ value, onChange }: SidebarSearchProps) {
   return (
     <div
       className={clsx(
-        "flex items-center gap-2 h-9 px-3 rounded-xl bg-base text-content-muted outline-1 outline-border","hover:outline-accent hover:text-content-primary","focus-within:text-content-primary focus-within:ring-1 focus-within:ring-accent focus-within:outline-transparent transition-colors ",
+        "flex items-center gap-2 h-8.5 px-3 rounded-xl bg-base text-content-muted outline-1 outline-border","hover:outline-accent hover:text-content-primary","focus-within:text-content-primary focus-within:ring-1 focus-within:ring-accent focus-within:outline-transparent transition-colors ",
       )}
     >
       <Search className="w-3.5 h-3.5 shrink-0" />
