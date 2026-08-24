@@ -20,7 +20,7 @@ export function CodeBlock({ language, value }: CodeBlockProps) {
   };
 
   return (
-    <div className="my-4 rounded-xl overflow-hidden bg-code-bg border border-code-border shadow-sm text-lg">
+    <div className="my-4 rounded-xl overflow-hidden bg-code-bg border border-code-border text-lg">
       {/* Code Header Bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-code-header-bg text-content-secondary">
         <span className="text-xs font-medium uppercase tracking-wider text-accent">
