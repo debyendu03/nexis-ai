@@ -69,7 +69,7 @@ export function SidebarHeader() {
           onClick={toggleSidebar}
           title="Close sidebar"
           aria-label="Close navigation sidebar"
-          className="p-2 rounded-xl hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
+          className="p-2 rounded-xl bg-elevated hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
         >
           <PanelLeftClose className="w-4 h-4" />
         </button>
