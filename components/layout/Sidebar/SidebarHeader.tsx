@@ -43,7 +43,7 @@ export function SidebarHeader() {
             alt="Nexis logo"
             className={clsx(
               "object-contain",
-              isSidebarOpen ? "h-8 w-auto" : "w-8 h-8",
+              isSidebarOpen ? "h-8.5 w-auto" : "w-8 h-8.5",
             )}
           />
         </Link>
@@ -69,7 +69,7 @@ export function SidebarHeader() {
           onClick={toggleSidebar}
           title="Close sidebar"
           aria-label="Close navigation sidebar"
-          className="w-8.5 h-8.5 flex items-center justify-center rounded-xl bg-elevated hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
+          className="w-8.5 h-8.5 flex items-center justify-center rounded-xl hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
         >
           <PanelLeftClose className="w-4 h-4" />
         </button>
