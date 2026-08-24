@@ -34,7 +34,7 @@ export function ConversationList({
   }
   return (
     <>
-     <div className="px-4 pt-2 text-xs font-semibold text-content-muted tracking-widest uppercase  ">
+     <div className="px-4 pt-2 text-xs font-semibold text-content-primary tracking-widest uppercase  ">
         Recent
       </div>
     <div
@@ -48,7 +48,7 @@ export function ConversationList({
      
 
       {conversations.length === 0 ? (
-        <div className="px-3 py-8 text-center text-sm text-content-muted">
+        <div className="px-3 py-8 text-center text-sm text-content-secondary">
           {searchQuery ? "No matching chats." : "No conversations yet."}
         </div>
       ) : (
@@ -61,10 +61,10 @@ export function ConversationList({
                 key={conv.id}
                 onClick={() => onSelect(conv.id)}
                 className={clsx(
-                  "group relative flex items-center justify-between px-2 py-2 rounded-xl text-sm cursor-pointer transition-all duration-150",
+                  "group relative flex items-center justify-between px-2 py-2 rounded-xl text-sm cursor-pointer transition-all duration-150 text-content-primary",
                   isActive
-                    ? "bg-elevated text-content-primary font-medium"
-                    : "text-content-secondary hover:text-content-primary hover:bg-surface",
+                    ? "bg-surface font-medium"
+                    : "hover:font-medium hover:bg-surface",
                 )}
               >
                 <div className="flex items-center gap-2 truncate">
@@ -76,7 +76,7 @@ export function ConversationList({
                   onClick={(e) => onDelete(e, conv.id)}
                   title="Delete chat"
                   aria-label={`Delete ${conv.title}`}
-                  className="absolute top-1/2 right-0 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-2 rounded-xl text-content-muted hover:text-danger bg-surface transition-all shrink-0 cursor-pointer"
+                  className="absolute top-1/2 right-0 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-2 rounded-xl text-content-muted hover:text-danger bg-surface hover:bg-elevated transition-all shrink-0 cursor-pointer"
                 >
                   <Trash2 className="w-3 h-3" />
                 </button>
