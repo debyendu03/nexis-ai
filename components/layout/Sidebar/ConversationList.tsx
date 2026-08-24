@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react";
 import clsx from "clsx";
 import { Conversation } from "@/types";
 import { useUIStore } from "@/store/useUIStore";
-import { useShallow } from "zustand/shallow";
+import { useTheme } from "next-themes";
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -21,12 +21,9 @@ export function ConversationList({
   onSelect,
   onDelete,
 }: ConversationListProps) {
-  const { isSidebarOpen, theme } = useUIStore(
-    useShallow((state) => ({
-      isSidebarOpen: state.isSidebarOpen,
-      theme: state.theme,
-    })),
-  );
+  const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
+
+  const { theme } = useTheme();
   const isDark = theme === "dark";
 
   if (!isSidebarOpen) {

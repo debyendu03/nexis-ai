@@ -6,16 +6,17 @@ import clsx from "clsx";
 import { useShallow } from "zustand/react/shallow";
 
 import { useUIStore } from "@/store/useUIStore";
+import { useTheme } from "next-themes";
 
 export function SidebarHeader() {
-  const { isSidebarOpen, toggleSidebar, theme } = useUIStore(
+  const { isSidebarOpen, toggleSidebar} = useUIStore(
     useShallow((state) => ({
       isSidebarOpen: state.isSidebarOpen,
-      toggleSidebar: state.toggleSidebar,
-      theme: state.theme,
+      toggleSidebar: state.toggleSidebar
     })),
   );
 
+  const { theme } = useTheme();
   const isDark = theme === "dark";
 
   // Logo sources
