@@ -38,10 +38,8 @@ export interface ChatStore {
 export type Theme = "light" | "dark";
 
 export interface UIStore {
-  isSidebarOpen: boolean;
-  theme: Theme;
+  isSidebarOpen: boolean; 
 
   // Actions
-  toggleSidebar: () => void;
-  toggleTheme: () => void;
+  toggleSidebar: () => void; 
 }
