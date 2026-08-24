@@ -35,8 +35,6 @@ export interface ChatStore {
   setStreaming: (streaming: boolean) => void;
 }
 
-export type Theme = "light" | "dark";
-
 export interface UIStore {
   isSidebarOpen: boolean; 
 

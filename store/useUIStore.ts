@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UIStore, Theme } from "@/types/index";
+import { UIStore } from "@/types/index";
 
 export const useUIStore = create<UIStore>((set) => ({
   // Initial state
