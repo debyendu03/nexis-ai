@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
 import { useChatStore } from "@/store/useChatStore";
+import clsx from "clsx";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -26,6 +27,12 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
       textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
     }
   }, [input]);
+  
+  useEffect(() => {
+    if (!disabled) {
+      requestAnimationFrame(() => textareaRef.current?.focus());
+    }
+  }, [disabled]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,17 +58,18 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
     <div className="w-full max-w-4xl mx-auto px-4 bg-transparent">
       <form
         onSubmit={handleSubmit}
-        className="relative flex flex-row bg-surface border border-border focus-within:border-accent/60 rounded-3xl p-3 ps-0 shadow-lg transition-all duration-200"
+        className={clsx("relative flex flex-row bg-surface border border-border rounded-full p-3 ps-1  transition-all duration-200","  hover:shadow-lg hover:!border-accent", "focus-within:shadow-lg focus-within:!border-accent")}
       >
         <textarea
           ref={textareaRef}
+          autoFocus
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           rows={1}
           disabled={disabled}
-          className="w-full resize-none bg-transparent px-3 py-1.5 text-sm placeholder:text-content-muted outline-none max-h-48 leading-relaxed"
+          className={clsx("w-full resize-none bg-transparent px-3 py-1.5 text-sm placeholder:text-content-muted outline-none max-h-48 leading-relaxed",)}
         />
 
         {/* Action Toolbar */}
@@ -76,8 +84,8 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
             aria-label="Send message"
             className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-150 ${
               input.trim() && !disabled
-                ? "bg-accent text-white shadow-accent-glow hover:opacity-90 cursor-pointer scale-100"
-                : "bg-border text-content-muted cursor-not-allowed scale-95 opacity-50"
+                ? "bg-accent text-white shadow-accent-glow hover:opacity-90 cursor-pointer"
+                : "bg-elevated border border-border text-content-muted cursor-not-allowed opacity-50"
             }`}
           >
             <ArrowUp className="w-4 h-4" />
