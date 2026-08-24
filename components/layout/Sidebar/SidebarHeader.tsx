@@ -55,7 +55,7 @@ export function SidebarHeader() {
             onClick={toggleSidebar}
             title="Open sidebar"
             aria-label="Open navigation sidebar"
-            className="absolute inset-0 flex items-center justify-center rounded-xl bg-surface opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+            className="absolute inset-0 flex items-center justify-center rounded-xl bg-surface opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer w-8.5 h-8.5 "
           >
             <PanelLeftOpen className="w-4 h-4 text-content-primary" />
           </button>
@@ -69,7 +69,7 @@ export function SidebarHeader() {
           onClick={toggleSidebar}
           title="Close sidebar"
           aria-label="Close navigation sidebar"
-          className="p-2 rounded-xl bg-elevated hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
+          className="w-8.5 h-8.5 flex items-center justify-center rounded-xl bg-elevated hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
         >
           <PanelLeftClose className="w-4 h-4" />
         </button>
