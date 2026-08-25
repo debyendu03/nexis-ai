@@ -4,12 +4,12 @@ import { useUIStore } from "@/store/useUIStore";
 import { useChatStore } from "@/store/useChatStore";
 import { Menu } from "lucide-react";
 import { useConversations } from "@/hooks/useConversations";
-import clsx from "clsx"
+import clsx from "clsx";
 
 export function Topbar() {
   const { renameConversation } = useConversations();
 
-  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
+  const toggleMobileSidebar = useUIStore((state) => state.toggleMobileSidebar);
 
   const conversations = useChatStore((state) => state.conversations);
   const activeConversationId = useChatStore((state) => state.activeConversationId);
@@ -30,7 +30,7 @@ export function Topbar() {
       <div className="flex items-center gap-3">
         {/* Mobile hamburger */}
         <button
-          onClick={toggleSidebar}
+          onClick={toggleMobileSidebar}
           className="md:hidden p-2 rounded-lg text-content-secondary hover:text-content-primary hover:bg-surface border border-border transition-colors cursor-pointer"
         >
           <Menu className="w-4 h-4" />

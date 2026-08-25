@@ -3,14 +3,14 @@
 import { useUIStore } from '@/store/useUIStore';
 
 export function SidebarBackdrop() {
-  const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
-  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
+  const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
+  const closeMobileSidebar = useUIStore((state) => state.closeMobileSidebar);
 
-  if (!isSidebarOpen) return null;
+  if (!isMobileSidebarOpen) return null;
 
   return (
     <div
-      onClick={toggleSidebar}
+      onClick={closeMobileSidebar}
       className="fixed inset-0 bg-black/90 z-30 md:hidden"
     />
   );

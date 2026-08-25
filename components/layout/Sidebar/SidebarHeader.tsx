@@ -65,28 +65,28 @@ export function SidebarHeader() {
           />
         </Link>
 
-        {/* Open sidebar button */}
+        {/* Open sidebar button — desktop collapsed state only */}
         {!isSidebarOpen && (
           <button
             type="button"
             onClick={toggleSidebar}
             title="Open sidebar"
             aria-label="Open navigation sidebar"
-            className="absolute inset-0 flex items-center justify-center rounded-xl bg-surface opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer w-8.5 h-8.5 "
+            className="absolute inset-0 hidden md:flex items-center justify-center rounded-xl bg-surface opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer w-8.5 h-8.5"
           >
             <PanelLeftOpen className="w-4 h-4 text-content-primary" />
           </button>
         )}
       </div>
 
-      {/* Close sidebar button */}
+      {/* Close sidebar button — desktop only */}
       {isSidebarOpen && (
         <button
           type="button"
           onClick={toggleSidebar}
           title="Close sidebar"
           aria-label="Close navigation sidebar"
-          className="w-8.5 h-8.5 flex items-center justify-center rounded-xl hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
+          className="hidden md:flex w-8.5 h-8.5 items-center justify-center rounded-xl hover:bg-surface text-content-secondary hover:text-content-primary transition-colors cursor-pointer"
         >
           <PanelLeftClose className="w-4 h-4" />
         </button>

@@ -31,6 +31,7 @@ export function Sidebar() {
     (state) => state.setActiveConversation,
   );
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
+  const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
 
   const currentId = (params?.id as string) || activeConversationId;
 
@@ -67,10 +68,10 @@ export function Sidebar() {
     <aside
       className={clsx(
         "h-screen bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
-        "transition-[width] duration-300 linear",
-        isSidebarOpen
-          ? "fixed inset-y-0 left-0 z-40 w-[80%] max-w-[320px] md:relative md:z-30 md:w-[30%]"
-          : "hidden md:flex md:w-14",
+        "fixed inset-y-0 left-0 w-[80%] max-w-[320px] transition-transform duration-300",
+        isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full",
+        "md:static md:translate-x-0",
+        isSidebarOpen ? "md:w-[30%]" : "md:w-14",
       )}
     >
       <div className="h-full flex flex-col justify-between gap-3 pt-5">

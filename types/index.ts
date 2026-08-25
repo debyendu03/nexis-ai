@@ -36,8 +36,10 @@ export interface ChatStore {
 }
 
 export interface UIStore {
-  isSidebarOpen: boolean; 
-
-  // Actions
-  toggleSidebar: () => void; 
+  isSidebarOpen: boolean;        
+  isMobileSidebarOpen: boolean; 
+  
+  toggleSidebar: () => void;
+  toggleMobileSidebar: () => void;
+  closeMobileSidebar: () => void;
 }
