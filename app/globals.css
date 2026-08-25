@@ -132,3 +132,42 @@ body::-webkit-scrollbar,
 html {
   font-size: clamp(12px, 0.875rem + 0.2vw, 20px);
 }
+
+/* scrollbar */
+.scrollbar-themed {
+  scrollbar-width: thin;
+  -ms-overflow-style: auto;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.scrollbar-themed::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-themed::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-themed::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.scrollbar-themed::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Dark theme */
+.dark .scrollbar-themed {
+  scrollbar-color: #475569 transparent;
+}
+
+.dark .scrollbar-themed::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark .scrollbar-themed::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
