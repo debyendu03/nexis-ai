@@ -4,9 +4,8 @@ import Link from "next/link";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import clsx from "clsx";
 import { useShallow } from "zustand/react/shallow";
-
+import Image from "next/image";
 import { useUIStore } from "@/store/useUIStore";
-import { useTheme } from "next-themes";
 
 export function SidebarHeader() {
   const { isSidebarOpen, toggleSidebar} = useUIStore(
@@ -15,15 +14,6 @@ export function SidebarHeader() {
       toggleSidebar: state.toggleSidebar
     })),
   );
-
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
-
-  // Logo sources
-  const fullLogo = isDark ? "/full-nexis-dark-theme-logo.png" : "/full-nexis-light-theme-logo.png";
-  const compactLogo = "/nexis-logo.png";
-
-  const logoSrc = isSidebarOpen ? fullLogo : compactLogo;
 
   return (
     <div
@@ -39,11 +29,37 @@ export function SidebarHeader() {
           title="Nexis Home"
           className="flex items-center justify-center"
         >
-          <img
-            src={logoSrc}
+          {/* Light theme logo */}
+          <Image
+            src={
+              isSidebarOpen
+                ? "/full-nexis-light-theme-logo.png"
+                : "/nexis-logo.png"
+            }
             alt="Nexis logo"
+            width={200}
+            height={50}
+            priority
             className={clsx(
-              "object-contain",
+              "object-contain dark:hidden",
+              isSidebarOpen ? "h-8.5 w-auto" : "w-8 h-8.5",
+            )}
+          />
+
+          {/* dark theme logo */}
+          <Image
+            src={
+              isSidebarOpen
+                ? "/full-nexis-dark-theme-logo.png"
+                : "/nexis-logo.png"
+            }
+            alt=""
+            aria-hidden="true"
+            width={200}
+            height={50}
+            priority
+            className={clsx(
+              "object-contain hidden dark:block",
               isSidebarOpen ? "h-8.5 w-auto" : "w-8 h-8.5",
             )}
           />
