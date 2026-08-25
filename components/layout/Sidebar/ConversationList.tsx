@@ -3,8 +3,7 @@
 import { Trash2 } from "lucide-react";
 import clsx from "clsx";
 import { Conversation } from "@/types";
-import { useUIStore } from "@/store/useUIStore";
-import { useTheme } from "next-themes";
+import { useUIStore } from "@/store/useUIStore"; 
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -21,10 +20,7 @@ export function ConversationList({
   onSelect,
   onDelete,
 }: ConversationListProps) {
-  const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
-
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const isSidebarOpen = useUIStore((state) => state.isSidebarOpen); 
 
   if (!isSidebarOpen) {
     return null;
@@ -34,13 +30,8 @@ export function ConversationList({
      <div className="px-4 pt-2 text-xs font-semibold text-content-primary tracking-widest uppercase  ">
         Recent
       </div>
-    <div
-      className="flex-1 overflow-y-auto px-2 pb-1 !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border hover:scrollbar-thumb-content-muted [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-content-muted"
-      style={{
-        scrollbarColor: isDark
-          ? "rgb(71 85 105) transparent"
-          : "rgb(203 213 225) transparent",
-      }}
+    <div 
+      className="flex-1 overflow-y-auto px-2 pb-1 scrollbar-themed"
     >
      
 
