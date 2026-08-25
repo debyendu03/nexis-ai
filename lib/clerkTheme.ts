@@ -53,7 +53,6 @@ export const clerkCustomAppearance = {
 
     
     formButtonPrimary: {
-      border: "2px solid red",
       backgroundColor: "var(--accent)",
       "&:hover": {
         backgroundColor: "var(--accent-hover)",
