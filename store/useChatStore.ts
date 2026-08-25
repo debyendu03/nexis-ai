@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ChatStore, Conversation, Theme } from '@/types';
+import { ChatStore, Conversation } from '@/types';
 
 export const useChatStore = create<ChatStore>((set) => ({
   // Initial state
