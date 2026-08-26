@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import clsx from "clsx";
 
 import { useChatStore } from "@/store/useChatStore";
 import { useUIStore } from "@/store/useUIStore";
 import { useConversations } from "@/hooks/useConversations";
+import { createConversation } from "@/lib/supabase";
 
 import { SidebarHeader } from "./SidebarHeader";
 import { NewChatButton } from "./NewChatButton";
@@ -17,6 +19,7 @@ import { SidebarUser } from "./SidebarUser";
 export function Sidebar() {
   const router = useRouter();
   const params = useParams();
+  const { user, isSignedIn } = useUser();
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -30,6 +33,7 @@ export function Sidebar() {
   const setActiveConversation = useChatStore(
     (state) => state.setActiveConversation,
   );
+  const addConversation = useChatStore((state) => state.addConversation);
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
   const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
 
@@ -39,7 +43,17 @@ export function Sidebar() {
     fetchConversations();
   }, [fetchConversations]);
 
-  const handleNewChat = () => {
+  const handleNewChat = async () => {
+    if (isSignedIn && user) {
+      const newConversation = await createConversation(user.id, "New Chat");
+
+      if (newConversation) {
+        addConversation(newConversation);
+        router.push(`/chat/${newConversation.id}`);
+        return;
+      }
+    }
+
     setActiveConversation(null);
     router.push("/chat");
   };
