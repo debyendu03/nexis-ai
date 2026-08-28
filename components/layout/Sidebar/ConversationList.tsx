@@ -4,6 +4,7 @@ import { Trash2 } from "lucide-react";
 import clsx from "clsx";
 import { Conversation } from "@/types";
 import { useUIStore } from "@/store/useUIStore"; 
+import { useUser } from "@clerk/nextjs";
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -20,11 +21,13 @@ export function ConversationList({
   onSelect,
   onDelete,
 }: ConversationListProps) {
+  const { isLoaded, isSignedIn } = useUser();
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen); 
 
-  if (!isSidebarOpen) {
-    return null;
-  }
+  if (!isLoaded || !isSignedIn) return null;
+
+  if (!isSidebarOpen) return null;
+  
   return (
     <>
      <div className="px-4 pt-2 text-xs font-semibold text-content-primary tracking-widest uppercase  ">

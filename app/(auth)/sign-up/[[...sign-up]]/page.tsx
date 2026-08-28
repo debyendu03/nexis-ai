@@ -8,7 +8,7 @@
           <SignUp
             path="/sign-up"
             signInUrl="/sign-in"
-            fallbackRedirectUrl="/chat"
+            fallbackRedirectUrl="/"
             appearance={clerkCustomAppearance}
           />
         </div>

@@ -26,7 +26,7 @@ export function SidebarUser() {
   // User information
   const userName = isSignedIn ? user?.fullName || "User" : "Guest Mode";
 
-  const userStatus = isSignedIn ? "Full Access" : "3 chats free";
+  const userStatus = isSignedIn ? "Full Access" : "Limited Access";
 
   return (
     <div className={containerClass}>

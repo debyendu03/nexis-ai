@@ -5,22 +5,24 @@ import { useChatStore } from "@/store/useChatStore";
 import { Menu } from "lucide-react";
 import { useConversations } from "@/hooks/useConversations";
 import clsx from "clsx";
+import { useParams } from "next/navigation";
 
 export function Topbar() {
-  const { renameConversation } = useConversations();
+  const params = useParams();
+  const currentId = (params?.id as string) || null;
+  const { renameConversation } = useConversations(currentId);
 
   const toggleMobileSidebar = useUIStore((state) => state.toggleMobileSidebar);
 
   const conversations = useChatStore((state) => state.conversations);
-  const activeConversationId = useChatStore((state) => state.activeConversationId);
-  const activeTitle = conversations.find((c) => c.id === activeConversationId)?.title || null;
+  const activeTitle =conversations.find((c) => c.id === currentId)?.title || null;
 
   const handleRename = () => {
-    if (!activeConversationId || !activeTitle) return;
+    if (!currentId || !activeTitle) return;
 
     const nextTitle = window.prompt("Rename conversation", activeTitle)?.trim();
     if (nextTitle && nextTitle !== activeTitle) {
-      renameConversation(activeConversationId, nextTitle);
+      renameConversation(currentId, nextTitle);
     }
   };
 
@@ -43,7 +45,7 @@ export function Topbar() {
             onClick={handleRename}
             className={clsx(
               "hidden md:flex items-center px-3 py-1.5 rounded-xl bg-surface transition-colors cursor-pointer border border-border",
-              "hover:bg-elevated"
+              "hover:bg-elevated",
             )}
             aria-label="Rename conversation"
           >
@@ -61,7 +63,7 @@ export function Topbar() {
           onClick={handleRename}
           className={clsx(
             "md:hidden absolute left-1/2 -translate-x-1/2 flex items-center px-3 py-1.5 rounded-xl bg-surface transition-colors cursor-pointer border border-border",
-            "hover:bg-elevated"
+            "hover:bg-elevated",
           )}
           aria-label="Rename conversation"
         >

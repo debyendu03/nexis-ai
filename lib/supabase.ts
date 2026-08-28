@@ -34,6 +34,7 @@ export async function getConversations(userId: string): Promise<Conversation[]> 
 
 /* Create a new conversation record in Supabase */
 export async function createConversation(
+  id: string,  
   userId: string,
   title: string = 'New Chat'
 ): Promise<Conversation | null> {
@@ -41,6 +42,7 @@ export async function createConversation(
     const { data, error } = await supabase
       .from('conversations')
       .insert({
+        id,   
         user_id: userId,
         title,
         created_at: new Date().toISOString(),

@@ -1,148 +1,129 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import { useChatStore } from "@/store/useChatStore";
 import { Message } from "@/types";
-import {
-  createConversation,
-  saveMessage,
-  getMessages,   
-} from "@/lib/supabase";
+import { createConversation, saveMessage, getMessages } from "@/lib/supabase";
+import { useGuestSession } from "./useGuestSession";
 
-const GUEST_LIMIT = 3;
-const GUEST_STORAGE_KEY = "nexis_guest_count";
-
-export function useChat() {
+export function useChat(conversationId: string | null) {
   const { user, isSignedIn } = useUser();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const router = useRouter();
+  const {
+    showAuthModal,
+    setShowAuthModal,
+    checkGuestLimit,
+    saveGuestMessages,
+  } = useGuestSession();
 
   const {
-    activeConversationId,
-    setActiveConversation,
     addConversation,
     isLoading,
     setLoading,
     isStreaming,
     setStreaming,
+    messagesByConversation,
+    setMessages,
+    addMessage,
+    updateMessage,
   } = useChatStore(
     useShallow((state) => ({
-      activeConversationId: state.activeConversationId,
-      setActiveConversation: state.setActiveConversation,
       addConversation: state.addConversation,
       isLoading: state.isLoading,
       setLoading: state.setLoading,
       isStreaming: state.isStreaming,
       setStreaming: state.setStreaming,
+      messagesByConversation: state.messagesByConversation,
+      setMessages: state.setMessages,
+      addMessage: state.addMessage,
+      updateMessage: state.updateMessage,
     })),
   );
 
-  /* Helper to get and increment guest message count */
-  const checkGuestLimit = useCallback((): boolean => {
-    if (isSignedIn) return true;
+  const messages = messagesByConversation[conversationId || ""] || [];
 
-    const count = parseInt(
-      sessionStorage.getItem(GUEST_STORAGE_KEY) || "0",
-      10,
-    );
-    if (count > GUEST_LIMIT) {
-      setShowAuthModal(true);
-      return false;
-    }
-
-    sessionStorage.setItem(GUEST_STORAGE_KEY, (count + 1).toString());
-    return true;
-  }, [isSignedIn]);
-
-  // Load messages for a conversation from Supabase 
   const loadMessages = useCallback(
     async (conversationId: string) => {
       if (!isSignedIn || !conversationId) return;
       const data = await getMessages(conversationId);
-      setMessages(data);
+      setMessages(conversationId, data);
     },
-    [isSignedIn],
+    [isSignedIn, setMessages],
   );
 
-  /* Send Message & Handle Gemini Stream */
   const sendMessage = useCallback(
     async (content: string) => {
       if (!content.trim() || isLoading || isStreaming) return;
-
-      // Check guest limit if not signed in
-      if (!checkGuestLimit()) return;
+      if (!checkGuestLimit(!!isSignedIn)) return;
 
       setLoading(true);
 
-      // Temporary IDs for optimistic UI updates
+      const isFirstMessage = !conversationId;
+      const finalConversationId = conversationId || crypto.randomUUID();
+
+      if (isFirstMessage) {
+        router.replace(`/chat/${finalConversationId}`);
+      }
+
       const userMessageId = crypto.randomUUID();
       const assistantMessageId = crypto.randomUUID();
-      let currentConversationId = activeConversationId;
 
-      // Prepare user message object
       const userMessage: Message = {
         id: userMessageId,
-        conversation_id: currentConversationId || "temp",
+        conversation_id: finalConversationId,
         role: "user",
         content: content.trim(),
         created_at: new Date().toISOString(),
       };
 
-      // Optimistic append to local messages
-      const updatedMessages = [...messages, userMessage];
-      setMessages(updatedMessages);
+      addMessage(finalConversationId, userMessage);
+      if (!isSignedIn) {
+        saveGuestMessages(finalConversationId, [...messages, userMessage]);
+      }
 
       try {
-        // If signed in and no active conversation, create one in Supabase
-        if (isSignedIn && user && !currentConversationId) {
-          // Generate title from first 30 chars of the prompt
+        if (isSignedIn && user && isFirstMessage) {
           const initialTitle =
             content.length > 30 ? `${content.substring(0, 45)}...` : content;
-
-          const newConv = await createConversation(user.id, initialTitle);
-          if (newConv) {
-            currentConversationId = newConv.id;
-            setActiveConversation(newConv.id);
-            addConversation(newConv);
-          }
+          const newConv = await createConversation(
+            finalConversationId,
+            user.id,
+            initialTitle,
+          );
+          if (newConv) addConversation(newConv);
         }
 
-        // Save user message to Supabase if authenticated
-        if (isSignedIn && currentConversationId) {
-          await saveMessage(currentConversationId, "user", content);
+        if (isSignedIn) {
+          await saveMessage(finalConversationId, "user", content);
         }
 
-        // Initialize streaming placeholder for assistant
         setLoading(false);
         setStreaming(true);
 
         const assistantPlaceholder: Message = {
           id: assistantMessageId,
-          conversation_id: currentConversationId || "temp",
+          conversation_id: finalConversationId,
           role: "assistant",
           content: "",
           created_at: new Date().toISOString(),
         };
+        addMessage(finalConversationId, assistantPlaceholder);
 
-        setMessages([...updatedMessages, assistantPlaceholder]);
-
-        // Call backend streaming endpoint
         const response = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            messages: updatedMessages.map((m) => ({
+            messages: [...messages, userMessage].map((m) => ({
               role: m.role,
               content: m.content,
             })),
           }),
         });
 
-        if (!response.ok || !response.body) {
-          throw new Error("Failed to fetch stream from /api/chat");
-        }
+        if (!response.ok || !response.body)
+          throw new Error("Failed to fetch stream");
 
-        // Read stream chunk by chunk
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let fullAssistantContent = "";
@@ -150,40 +131,36 @@ export function useChat() {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          fullAssistantContent += chunk;
-
-          // Update streaming message in UI
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === assistantMessageId
-                ? { ...msg, content: fullAssistantContent }
-                : msg,
-            ),
-          );
+          fullAssistantContent += decoder.decode(value, { stream: true });
+          updateMessage(finalConversationId, assistantMessageId, {
+            content: fullAssistantContent,
+          });
         }
 
-        // Stream finished: save complete response in Supabase if authenticated
-        if (isSignedIn && currentConversationId && fullAssistantContent) {
+        if (isSignedIn && fullAssistantContent) {
           await saveMessage(
-            currentConversationId,
+            finalConversationId,
             "assistant",
             fullAssistantContent,
           );
         }
+
+        if (!isSignedIn) {
+          saveGuestMessages(finalConversationId, [
+            ...messages,
+            userMessage,
+            { ...assistantPlaceholder, content: fullAssistantContent },
+          ]);
+        }
       } catch (error) {
-        console.error("Error during chat stream:", error);
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: crypto.randomUUID(),
-            conversation_id: currentConversationId || "temp",
-            role: "assistant",
-            content:"Sorry, I encountered an error. Please check your connection and try again.",
-            created_at: new Date().toISOString(),
-          },
-        ]);
+        addMessage(finalConversationId, {
+          id: crypto.randomUUID(),
+          conversation_id: finalConversationId,
+          role: "assistant",
+          content:
+            "Sorry, I encountered an error. Please check your connection and try again.",
+          created_at: new Date().toISOString(),
+        });
       } finally {
         setLoading(false);
         setStreaming(false);
@@ -193,22 +170,24 @@ export function useChat() {
       messages,
       isLoading,
       isStreaming,
-      activeConversationId,
+      conversationId,
       isSignedIn,
       user,
       checkGuestLimit,
-      setActiveConversation,
       addConversation,
       setLoading,
       setStreaming,
+      addMessage,
+      updateMessage,
+      router,
+      saveGuestMessages,
     ],
   );
 
   return {
     messages,
-    setMessages,
     sendMessage,
-    loadMessages, 
+    loadMessages,
     isLoading,
     isStreaming,
     showAuthModal,

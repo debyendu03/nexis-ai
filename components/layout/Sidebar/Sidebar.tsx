@@ -4,10 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import clsx from "clsx";
 
-import { useChatStore } from "@/store/useChatStore";
 import { useUIStore } from "@/store/useUIStore";
 import { useConversations } from "@/hooks/useConversations";
-
 import { SidebarHeader } from "./SidebarHeader";
 import { NewChatButton } from "./NewChatButton";
 import { SidebarSearch } from "./SidebarSearch";
@@ -17,35 +15,24 @@ import { SidebarUser } from "./SidebarUser";
 export function Sidebar() {
   const router = useRouter();
   const params = useParams();
+  const currentId = (params?.id as string) || null;
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const {
-    conversations,
-    activeConversationId,
-    fetchConversations,
-    removeConversation,
-  } = useConversations();
+  const { conversations, fetchConversations, removeConversation } = useConversations(currentId);
 
-  const setActiveConversation = useChatStore(
-    (state) => state.setActiveConversation,
-  );
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
   const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
-
-  const currentId = (params?.id as string) || activeConversationId;
 
   useEffect(() => {
     fetchConversations();
   }, [fetchConversations]);
 
   const handleNewChat = () => {
-    setActiveConversation(null);
-    router.push("/chat");
+    router.push("/");
   };
 
   const handleSelectConversation = (id: string) => {
-    setActiveConversation(id);
     router.push(`/chat/${id}`);
   };
 
@@ -56,7 +43,7 @@ export function Sidebar() {
     await removeConversation(id);
 
     if (currentId === id) {
-      router.push("/chat");
+      router.push("/");
     }
   };
 

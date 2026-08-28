@@ -20,19 +20,22 @@ export interface Conversation {
 
 export interface ChatStore {
   // State
-  conversations: Conversation[];
-  activeConversationId: string | null;
+  conversations: Conversation[]; 
   isLoading: boolean;
   isStreaming: boolean;
+  messagesByConversation: Record<string, Message[]>;
+
 
   // Actions
-  setConversations: (conversations: Conversation[]) => void;
-  setActiveConversation: (id: string | null) => void;
+  setConversations: (conversations: Conversation[]) => void; 
   addConversation: (conversation: Conversation) => void;
   updateConversationTitle: (id: string, title: string) => void;
   deleteConversation: (id: string) => void;
   setLoading: (loading: boolean) => void;
   setStreaming: (streaming: boolean) => void;
+  setMessages: (conversationId: string, messages: Message[]) => void;
+  addMessage: (conversationId: string, message: Message) => void;
+  updateMessage: (conversationId: string, messageId: string, patch: Partial<Message>) => void;
 }
 
 export interface UIStore {

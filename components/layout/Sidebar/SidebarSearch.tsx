@@ -3,15 +3,18 @@
 import { Search } from "lucide-react";
 import clsx from "clsx";
 import { useUIStore } from "@/store/useUIStore";
+import { useUser } from "@clerk/nextjs";
 
 interface SidebarSearchProps {
   value: string;
   onChange: (value: string) => void; 
 }
 
-export function SidebarSearch({ value, onChange }: SidebarSearchProps) {
-  
+export function SidebarSearch({ value, onChange }: SidebarSearchProps) { 
+  const { isLoaded, isSignedIn } = useUser();
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
+
+  if (!isLoaded || !isSignedIn) return null;
 
   if (!isSidebarOpen) {
     return (

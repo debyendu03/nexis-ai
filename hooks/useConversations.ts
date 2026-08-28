@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import { useChatStore } from "@/store/useChatStore";
 import {
@@ -8,17 +9,15 @@ import {
   updateConversationTitleInDb,
 } from "@/lib/supabase";
 
-export function useConversations() {
+export function useConversations(conversationId: string | null) {
   const { user, isSignedIn } = useUser();
+  const router = useRouter();
 
-  // Zustand selectors
   const {
     conversations,
     setConversations,
     deleteConversation,
     updateConversationTitle,
-    setActiveConversation,
-    activeConversationId,
     isLoading,
     setLoading,
   } = useChatStore(
@@ -27,14 +26,11 @@ export function useConversations() {
       setConversations: state.setConversations,
       deleteConversation: state.deleteConversation,
       updateConversationTitle: state.updateConversationTitle,
-      setActiveConversation: state.setActiveConversation,
-      activeConversationId: state.activeConversationId,
       isLoading: state.isLoading,
       setLoading: state.setLoading,
     })),
   );
 
-  // Fetch all conversations from Supabase + sync to store
   const fetchConversations = useCallback(async () => {
     if (!isSignedIn || !user) return;
     setLoading(true);
@@ -45,37 +41,30 @@ export function useConversations() {
       setLoading(false);
     }
   }, [isSignedIn, user, setConversations]);
-  
-  //Delete conversation from DB + remove from local store
-  const removeConversation = useCallback(
-    async (conversationId: string) => {
-      deleteConversation(conversationId);
 
-      if (activeConversationId === conversationId) {
-        setActiveConversation(null);
+  const removeConversation = useCallback(
+    async (targetId: string) => {
+      deleteConversation(targetId);
+
+      if (targetId === conversationId) {
+        router.push("/");
       }
 
       if (isSignedIn) {
-        await deleteConversationFromDb(conversationId);
+        await deleteConversationFromDb(targetId);
       }
     },
-    [
-      isSignedIn,
-      activeConversationId,
-      deleteConversation,
-      setActiveConversation,
-    ],
+    [isSignedIn, conversationId, deleteConversation, router],
   );
 
-  // Rename conversation title in DB + update local store
   const renameConversation = useCallback(
-    async (conversationId: string, newTitle: string) => {
+    async (targetId: string, newTitle: string) => {
       if (!newTitle.trim()) return;
 
-      updateConversationTitle(conversationId, newTitle.trim());
+      updateConversationTitle(targetId, newTitle.trim());
 
       if (isSignedIn) {
-        await updateConversationTitleInDb(conversationId, newTitle.trim());
+        await updateConversationTitleInDb(targetId, newTitle.trim());
       }
     },
     [isSignedIn, updateConversationTitle],
@@ -84,7 +73,6 @@ export function useConversations() {
   return {
     conversations,
     isLoading,
-    activeConversationId,
     fetchConversations,
     removeConversation,
     renameConversation,
