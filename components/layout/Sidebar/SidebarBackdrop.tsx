@@ -11,7 +11,7 @@ export function SidebarBackdrop() {
   return (
     <div
       onClick={closeMobileSidebar}
-      className="fixed inset-0 bg-black/90 z-30 md:hidden"
+      className="fixed inset-0 bg-black/60 z-30 md:hidden"
     />
   );
 }
