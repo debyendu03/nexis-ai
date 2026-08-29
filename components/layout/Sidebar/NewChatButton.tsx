@@ -10,25 +10,20 @@ export function NewChatButton({ onClick }: { onClick: () => void }) {
   const { redirectToSignIn } = useClerk();
 
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
+  const closeMobileSidebar = useUIStore((state) => state.closeMobileSidebar);
+  const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
+
+  const handleSignInClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    if (isMobileSidebarOpen) {closeMobileSidebar(); }
+    redirectToSignIn();
+  };
 
   if (!isLoaded) {
     return null;
   }
 
   if (!isSignedIn) {
-    const signInLink = (
-      <a
-        href="#sign-in"
-        onClick={(event) => {
-          event.preventDefault();
-          redirectToSignIn();
-        }}
-        className="underline transition-colors hover:text-accent"
-      >
-        Sign in
-      </a>
-    );
-
     return (
       <div
         className={clsx(
@@ -40,21 +35,24 @@ export function NewChatButton({ onClick }: { onClick: () => void }) {
         {!isSidebarOpen ? (
           <button
             type="button"
-            onClick={(event) => {
-              event.preventDefault();
-              void redirectToSignIn();
-            }}
+            onClick={handleSignInClick}
             aria-label="Sign in to save activity"
             className="flex items-center justify-center w-8.5 h-8.5 mx-auto rounded-xl cursor-pointer text-content-muted hover:bg-surface hover:text-content-primary transition-colors"
           >
-            <CircleAlert className="h-4 w-4 shrink-0 " aria-hidden="true" />
+            <CircleAlert className="h-4 w-4 shrink-0" aria-hidden="true" />
           </button>
         ) : (
-          <>
-            <span className="whitespace-nowrap">
-              {signInLink} to save activity
-            </span>
-          </>
+          <span className="whitespace-nowrap">
+            <a
+              role="button"
+              tabIndex={0}
+              onClick={handleSignInClick} 
+              className="underline transition-colors hover:text-accent"
+            >
+              Sign in
+            </a>{" "}
+            to save activity
+          </span>
         )}
       </div>
     );
