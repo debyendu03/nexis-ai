@@ -36,20 +36,18 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body>
-          <div className="h-screen w-full flex text-content-primary overflow-hidden relative">
-            <ThemeProvider>
-              <GuestSessionGuard />
-              <SidebarBackdrop />
-              <Sidebar />
-              <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0 relative">
-                <Topbar />
-                <main className="flex-1 relative flex flex-col min-h-0">
-                  {children}
-                </main>
-              </div>
-            </ThemeProvider>
-          </div>
+        <body className="h-dvh w-full flex text-content-primary overflow-hidden relative">
+          <ThemeProvider>
+            <GuestSessionGuard />
+            <SidebarBackdrop />
+            <Sidebar />
+            <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0 relative">
+              <Topbar />
+              <main className="flex-1 relative flex flex-col min-h-0">
+                {children}
+              </main>
+            </div>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
