@@ -33,10 +33,11 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
     }
   }, [input]);
   
+  //auto focus
   useEffect(() => {
-    if (!disabled) {
-      requestAnimationFrame(() => textareaRef.current?.focus());
-    }
+    if (!disabled && window.innerWidth > 768) {
+    requestAnimationFrame(() => textareaRef.current?.focus());
+  }
   }, [disabled]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -74,8 +75,7 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
         className={clsx("relative flex flex-row bg-surface border border-border rounded-3xl p-3 ps-1 transition-all duration-200", "hover:shadow-lg hover:!border-accent", "focus-within:shadow-lg focus-within:!border-accent")}
       >
         <textarea
-          ref={textareaRef}
-          autoFocus
+          ref={textareaRef} 
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
