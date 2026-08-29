@@ -8,12 +8,14 @@ import Image from "next/image";
 import { useUIStore } from "@/store/useUIStore";
 
 export function SidebarHeader() {
-  const { isSidebarOpen, toggleSidebar} = useUIStore(
+  const { isSidebarOpen, toggleSidebar, closeMobileSidebar, isMobileSidebarOpen} = useUIStore(
     useShallow((state) => ({
       isSidebarOpen: state.isSidebarOpen,
-      toggleSidebar: state.toggleSidebar
+      toggleSidebar: state.toggleSidebar,
+      closeMobileSidebar:state.closeMobileSidebar,
+      isMobileSidebarOpen:state.isMobileSidebarOpen,
     })),
-  );
+  ); 
 
   return (
     <div
@@ -28,6 +30,7 @@ export function SidebarHeader() {
           href="/"
           title="Nexis Home"
           className="flex items-center justify-center"
+          onClick={()=>{if(isMobileSidebarOpen) closeMobileSidebar()}}
         >
           {/* Light theme logo */}
           <Image
