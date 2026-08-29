@@ -54,7 +54,7 @@ export function Sidebar() {
   return (
     <aside
       className={clsx(
-        "h-screen bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
+        "h-dvh bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
         "fixed inset-y-0 left-0 w-[80%] max-w-[320px] transition-transform duration-300",
         isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full",
         "md:static md:translate-x-0",
