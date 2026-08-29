@@ -57,7 +57,7 @@ export default function DynamicChatPage({ params }: DynamicChatPageProps) {
 
   return (
     <div className="flex-1 flex flex-col h-full justify-between overflow-hidden bg-base">
-      <div className="flex-1 overflow-y-auto flex flex-col">
+      <div className="flex-1 flex flex-col min-h-0">
         {isLoading && messages.length === 0 ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="flex items-center gap-2 text-content-secondary text-xs">

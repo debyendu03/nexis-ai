@@ -41,7 +41,10 @@ export interface ChatStore {
 export interface UIStore {
   isSidebarOpen: boolean;        
   isMobileSidebarOpen: boolean; 
+  isAtBottom: boolean;              
   
+  scrollToBottomFn: (() => void) | null;  
+  setScrollState: (isAtBottom: boolean, scrollFn: () => void) => void;   
   toggleSidebar: () => void;
   toggleMobileSidebar: () => void;
   closeMobileSidebar: () => void;

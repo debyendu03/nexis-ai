@@ -44,7 +44,7 @@ export default function RootLayout({
               <Sidebar />
               <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0 relative">
                 <Topbar />
-                <main className="flex-1 overflow-y-auto relative flex flex-col">
+                <main className="flex-1 relative flex flex-col min-h-0">
                   {children}
                 </main>
               </div>
