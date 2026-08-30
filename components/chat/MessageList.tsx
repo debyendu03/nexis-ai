@@ -1,9 +1,12 @@
-'use client';
+"use client";
 
-import { useRef, useEffect, useCallback } from 'react';
-import { Message } from '@/types';
-import { MessageItem } from './MessageItem'; 
-import { useUIStore } from '@/store/useUIStore';
+import { useRef, useEffect, useCallback, useState } from "react";
+import { Message } from "@/types";
+import { MessageItem } from "./MessageItem";
+import { useUIStore } from "@/store/useUIStore";
+
+const SCROLL_OFFSET = 80; 
+const BOTTOM_THRESHOLD = 100;
 
 interface MessageListProps {
   messages: Message[];
@@ -12,31 +15,92 @@ interface MessageListProps {
 export function MessageList({ messages }: MessageListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const hasInitializedRef = useRef(false);  
+  const spacerRef = useRef<HTMLDivElement>(null);
+  const lastUserMessageRef = useRef<HTMLDivElement | null>(null);
+  const prevUserMessageIdRef = useRef<string | null>(null);
+  const targetScrollTopRef = useRef(0);
+  const pinnedRef = useRef(false);
+  const [spacerHeight, setSpacerHeight] = useState(0);
+
+  const initialMessageCountRef = useRef(messages.length);
+  const hasInitializedRef = useRef(false);
+
   const setScrollState = useUIStore((state) => state.setScrollState);
 
   const scrollToBottom = useCallback(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   const checkIfAtBottom = useCallback(() => {
     const el = containerRef.current;
     if (!el) return;
-    const threshold = 100;
-    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < threshold;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < BOTTOM_THRESHOLD;
     setScrollState(atBottom, scrollToBottom);
   }, [setScrollState, scrollToBottom]);
 
-  useEffect(() => {
-    checkIfAtBottom();
-  }, [checkIfAtBottom]);
+  const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
 
-  useEffect(() => { 
-    if (!hasInitializedRef.current && messages.length > 0) {
-      bottomRef.current?.scrollIntoView({ behavior: 'auto' });
-      hasInitializedRef.current = true;
+  const enforcePin = useCallback((smooth = false) => {
+    const container = containerRef.current;
+    const spacerEl = spacerRef.current;
+    if (!container || !spacerEl) return;
+
+    const desired = targetScrollTopRef.current;
+    const contentHeightWithoutSpacer = spacerEl.offsetTop;
+    const clientHeight = container.clientHeight;
+    const required = Math.max(0, desired + clientHeight - contentHeightWithoutSpacer);
+
+    spacerEl.style.height = `${required}px`;
+    spacerEl.style.minHeight = `${required}px`;
+    setSpacerHeight(required);
+
+    if (smooth) {
+      container.scrollTo({ top: desired, behavior: "smooth" });
+    } else {
+      container.scrollTop = desired;
     }
-  }, [messages]);
+
+    if (required <= 0) pinnedRef.current = false;
+  }, []);
+
+  useEffect(() => {
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
+
+    if (initialMessageCountRef.current > 0) {
+      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+      prevUserMessageIdRef.current = lastUserMessage?.id ?? null;
+    } 
+  }, [lastUserMessage]);
+ 
+  useEffect(() => {
+    const container = containerRef.current;
+    const spacerEl = spacerRef.current;
+    if (!container || !spacerEl) return;
+
+    const isNewUserMessage = lastUserMessage && lastUserMessage.id !== prevUserMessageIdRef.current;
+
+    if (isNewUserMessage) {
+      prevUserMessageIdRef.current = lastUserMessage.id;
+      pinnedRef.current = true;
+
+      requestAnimationFrame(() => {
+        const target = lastUserMessageRef.current;
+        if (target && container) {
+          const targetRect = target.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          targetScrollTopRef.current =
+            container.scrollTop + (targetRect.top - containerRect.top) - SCROLL_OFFSET;
+          enforcePin(true); 
+        }
+      });
+      return;
+    }
+
+    if (pinnedRef.current) {
+      enforcePin(false); 
+    }
+  }, [messages, lastUserMessage, enforcePin]);
  
   useEffect(() => {
     checkIfAtBottom();
@@ -48,9 +112,20 @@ export function MessageList({ messages }: MessageListProps) {
       onScroll={checkIfAtBottom}
       className="overflow-y-auto w-full max-w-4xl mx-auto flex flex-col pt-13 h-full"
     >
-      {messages.map((message, index) => (
-        <MessageItem key={message.id || index} message={message} />
-      ))}
+      {messages.map((message, index) => {
+        const isThisTheLastUserMessage = lastUserMessage?.id === message.id;
+        return (
+          <div
+            key={message.id || index}
+            ref={(el) => {
+              if (isThisTheLastUserMessage) lastUserMessageRef.current = el;
+            }}
+          >
+            <MessageItem message={message} />
+          </div>
+        );
+      })}
+      <div ref={spacerRef} style={{ height: spacerHeight, minHeight: spacerHeight }} />
       <div ref={bottomRef} />
     </div>
   );
