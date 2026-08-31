@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 import { useUIStore } from "@/store/useUIStore";
 import { useConversations } from "@/hooks/useConversations";
+import { Modal } from "@/components/ui/Modal";
 import { SidebarHeader } from "./SidebarHeader";
 import { NewChatButton } from "./NewChatButton";
 import { SidebarSearch } from "./SidebarSearch";
@@ -18,11 +19,13 @@ export function Sidebar() {
   const currentId = (params?.id as string) || null;
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   const { conversations, fetchConversations, removeConversation } = useConversations(currentId);
 
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
   const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
+  const closeMobileSidebar = useUIStore((state) => state.closeMobileSidebar);
 
   useEffect(() => {
     fetchConversations();
@@ -33,6 +36,8 @@ export function Sidebar() {
   };
 
   const handleSelectConversation = (id: string) => {
+    setIsSearchModalOpen(false);
+    if (isMobileSidebarOpen) closeMobileSidebar();
     router.push(`/chat/${id}`);
   };
 
@@ -52,44 +57,76 @@ export function Sidebar() {
   );
 
   return (
-    <aside
-      className={clsx(
-        "h-dvh bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
-        "fixed inset-y-0 left-0 w-[80%] max-w-[320px] transition-transform duration-300",
-        isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full",
-        "md:static md:translate-x-0",
-        isSidebarOpen ? "md:w-[30%]" : "md:w-14",
-      )}
-    >
-      <div className="h-full flex flex-col justify-between gap-3 pt-5">
-        {/* Header (New Chat + Search + logo) */}
-        <div
-          className={clsx(
-            "flex flex-col gap-5",
-            isSidebarOpen ? "px-4" : "px-1",
-          )}
-        >
-          <div className="pb-1">
-            <SidebarHeader />
+    <>
+      <aside
+        className={clsx(
+          "h-dvh bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
+          "fixed inset-y-0 left-0 w-[80%] max-w-[320px] transition-transform duration-300",
+          isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full",
+          "md:static md:translate-x-0",
+          isSidebarOpen ? "md:w-[30%]" : "md:w-14",
+        )}
+      >
+        <div className="h-full flex flex-col justify-between gap-3 pt-5">
+          {/* Header (New Chat + Search + logo) */}
+          <div
+            className={clsx(
+              "flex flex-col gap-5",
+              isSidebarOpen ? "px-4" : "px-1",
+            )}
+          >
+            <div className="pb-1">
+              <SidebarHeader />
+            </div>
+
+            <NewChatButton onClick={handleNewChat} />
+
+            <SidebarSearch
+              value={searchQuery}
+              onChange={setSearchQuery}
+              onSearchOpenModal={() => setIsSearchModalOpen(true)}
+            />
           </div>
 
-          <NewChatButton onClick={handleNewChat} />
+          {/* Conversations */}
+          <ConversationList
+            conversations={filteredConversations}
+            currentId={currentId}
+            searchQuery={searchQuery}
+            onSelect={handleSelectConversation}
+            onDelete={handleDelete}
+          />
 
-          <SidebarSearch value={searchQuery} onChange={setSearchQuery} />
+          {/* User */}
+          <SidebarUser />
         </div>
+      </aside>
 
-        {/* Conversations */}
-        <ConversationList
-          conversations={filteredConversations}
-          currentId={currentId}
-          searchQuery={searchQuery}
-          onSelect={handleSelectConversation}
-          onDelete={handleDelete}
-        />
-
-        {/* User */}
-        <SidebarUser />
-      </div>
-    </aside>
+      {!isSidebarOpen && (
+        <Modal
+          open={isSearchModalOpen}
+          onClose={() => setIsSearchModalOpen(false)}
+          className="aspect-square w-[min(90vw,450px)] pt-6.5 pb-5 px-1.5"
+        >
+          <div className="flex h-full flex-col gap-3">
+            <div className="px-4">
+              <SidebarSearch
+                value={searchQuery}
+                onChange={setSearchQuery}
+                isSearchModalOpen={isSearchModalOpen} 
+              />
+            </div>
+            <ConversationList
+              conversations={filteredConversations}
+              currentId={currentId}
+              searchQuery={searchQuery}
+              onSelect={handleSelectConversation}
+              onDelete={handleDelete}
+              isSearchModalOpen={isSearchModalOpen}
+            />
+          </div>
+        </Modal>
+      )}
+    </>
   );
 }
