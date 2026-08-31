@@ -5,7 +5,7 @@ import { Message } from "@/types";
 import { MessageItem } from "./MessageItem";
 import { useUIStore } from "@/store/useUIStore";
 
-const SCROLL_OFFSET = 80; 
+const SCROLL_OFFSET = 60; 
 const BOTTOM_THRESHOLD = 100;
 
 interface MessageListProps {
@@ -62,16 +62,15 @@ export function MessageList({ messages }: MessageListProps) {
 
     if (required <= 0) pinnedRef.current = false;
   }, []);
-
+  
   useEffect(() => {
-    if (hasInitializedRef.current) return;
-    hasInitializedRef.current = true;
+  if (hasInitializedRef.current) return;
+  if (messages.length === 0) return; 
 
-    if (initialMessageCountRef.current > 0) {
-      bottomRef.current?.scrollIntoView({ behavior: "auto" });
-      prevUserMessageIdRef.current = lastUserMessage?.id ?? null;
-    } 
-  }, [lastUserMessage]);
+  hasInitializedRef.current = true;
+  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  prevUserMessageIdRef.current = lastUserMessage?.id ?? null;
+}, [messages, lastUserMessage]);
  
   useEffect(() => {
     const container = containerRef.current;
