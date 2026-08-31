@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Message } from "@/types";
 import { createConversation, saveMessage } from "@/lib/supabase";
 
-const GUEST_LIMIT = 2;
+const GUEST_LIMIT = 5;
 const GUEST_STORAGE_KEY = "nexis_guest_count";
 const GUEST_MESSAGES_KEY = "nexis_guest_messages";
 
