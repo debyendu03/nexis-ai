@@ -15,13 +15,23 @@ export function NewChatButton({ onClick }: { onClick: () => void }) {
 
   const handleSignInClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    if (isMobileSidebarOpen) {closeMobileSidebar(); }
+    if (isMobileSidebarOpen) {
+      closeMobileSidebar();
+    }
     redirectToSignIn();
   };
 
-  if (!isLoaded) {
-    return null;
-  }
+ if (!isLoaded) {
+  return (
+    <div
+      className={clsx(
+        "flex items-center justify-center w-full"
+      )}
+    >
+      <div className="h-4 w-[65%] mt-1.5 rounded bg-surface animate-pulse" />
+    </div>
+  );
+}
 
   if (!isSignedIn) {
     return (
@@ -43,14 +53,13 @@ export function NewChatButton({ onClick }: { onClick: () => void }) {
           </button>
         ) : (
           <span className="whitespace-nowrap">
-            <a href=""
-              role="button"
-              tabIndex={0}
-              onClick={handleSignInClick} 
-              className="underline transition-colors hover:text-accent"
+            <button
+              type="button"
+              onClick={handleSignInClick}
+              className="underline transition-colors hover:text-accent cursor-pointer"
             >
               Sign in
-            </a>{" "}
+            </button>{" "}
             to save activity
           </span>
         )}
