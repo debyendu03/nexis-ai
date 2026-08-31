@@ -22,7 +22,6 @@ export function MessageList({ messages }: MessageListProps) {
   const pinnedRef = useRef(false);
   const [spacerHeight, setSpacerHeight] = useState(0);
 
-  const initialMessageCountRef = useRef(messages.length);
   const hasInitializedRef = useRef(false);
 
   const setScrollState = useUIStore((state) => state.setScrollState);

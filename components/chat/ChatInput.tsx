@@ -20,8 +20,8 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
   const isStreaming = useChatStore((state) => state.isStreaming);
 
   // Zustand UI state
-  const isAtBottom = useUIStore((state) => state.isAtBottom);  
-  const scrollToBottomFn = useUIStore((state) => state.scrollToBottomFn); 
+  const isAtBottom = useUIStore((state) => state.isAtBottom);
+  const scrollToBottomFn = useUIStore((state) => state.scrollToBottomFn);
 
   const disabled = isLoading || isStreaming;
   const placeholder = isStreaming ? "Nexis is thinking..." : "Ask Nexis anything...";
@@ -32,12 +32,12 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
       textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
     }
   }, [input]);
-  
+
   //auto focus
   useEffect(() => {
     if (!disabled && window.innerWidth > 768) {
-    requestAnimationFrame(() => textareaRef.current?.focus());
-  }
+      requestAnimationFrame(() => textareaRef.current?.focus());
+    }
   }, [disabled]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -62,14 +62,17 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 bg-transparent relative">
-      {!isAtBottom && (  
         <button
-          onClick={() => scrollToBottomFn?.()}  
-          className="p-2 rounded-full flex items-center justify-center transition-all duration-150 bg-surface hover:bg-elevated border border-border text-content-muted cursor-pointer absolute left-1/2 -translate-x-1/2 -top-14 z-10 self-center"
+          onClick={() => scrollToBottomFn?.()}
+          className={clsx(
+            "p-2 rounded-full flex items-center justify-center transition-opacity ease-in-out duration-150 bg-surface hover:bg-elevated border border-border text-content-muted cursor-pointer absolute left-1/2 -translate-x-1/2 -top-14 z-10 self-center",
+            isAtBottom
+            ? "opacity-0 pointer-events-none"
+            : "opacity-100 pointer-events-auto",
+          )}
         >
           <ArrowDown className="w-4 h-4" />
         </button>
-      )}
       <form
         onSubmit={handleSubmit}
         className={clsx("relative flex flex-row bg-surface border border-border rounded-3xl p-3 ps-1 transition-all duration-200", "hover:shadow-lg hover:!border-accent", "focus-within:shadow-lg focus-within:!border-accent")}
@@ -80,8 +83,7 @@ export function ChatInput({onSendMessage}: ChatInputProps) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          rows={1}
-          disabled={disabled}
+          rows={1} 
           className="w-full resize-none bg-transparent px-3 py-1.5 text-sm placeholder:text-content-muted outline-none max-h-48 leading-relaxed"
         />
         <div className="flex items-end">

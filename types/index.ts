@@ -48,4 +48,5 @@ export interface UIStore {
   toggleSidebar: () => void;
   toggleMobileSidebar: () => void;
   closeMobileSidebar: () => void;
+  resetScrollState: () => void;
 }

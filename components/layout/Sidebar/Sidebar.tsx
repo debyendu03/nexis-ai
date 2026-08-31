@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import clsx from "clsx";
 
 import { useUIStore } from "@/store/useUIStore";
+import { useChatStore } from "@/store/useChatStore";
 import { useConversations } from "@/hooks/useConversations";
 import { Modal } from "@/components/ui/Modal";
 import { SidebarHeader } from "./SidebarHeader";
@@ -26,12 +27,18 @@ export function Sidebar() {
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
   const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
   const closeMobileSidebar = useUIStore((state) => state.closeMobileSidebar);
+  const resetScrollState = useUIStore((state) => state.resetScrollState);  
+  const setLoading = useChatStore((state) => state.setLoading);
+  const setStreaming = useChatStore((state) => state.setStreaming);
 
   useEffect(() => {
     fetchConversations();
   }, [fetchConversations]);
 
   const handleNewChat = () => {
+    resetScrollState();
+    setLoading(false);
+    setStreaming(false);
     router.push("/");
   };
 

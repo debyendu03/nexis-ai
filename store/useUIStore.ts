@@ -11,4 +11,5 @@ export const useUIStore = create<UIStore>((set) => ({
   toggleSidebar: () =>set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   toggleMobileSidebar: () =>set((state) => ({ isMobileSidebarOpen: !state.isMobileSidebarOpen })),
   closeMobileSidebar: () => set({ isMobileSidebarOpen: false }),
+  resetScrollState:()=>set({isAtBottom:true, scrollToBottomFn: null})
 }));
