@@ -20,10 +20,10 @@ export function MessageList({ messages }: MessageListProps) {
   const prevUserMessageIdRef = useRef<string | null>(null);
   const targetScrollTopRef = useRef(0);
   const pinnedRef = useRef(false);
-  const [spacerHeight, setSpacerHeight] = useState(0);
-
+  const programmaticScrollRef = useRef(false);
   const hasInitializedRef = useRef(false);
 
+  const [spacerHeight, setSpacerHeight] = useState(0);
   const setScrollState = useUIStore((state) => state.setScrollState);
 
   const scrollToBottom = useCallback(() => {
@@ -53,14 +53,48 @@ export function MessageList({ messages }: MessageListProps) {
     spacerEl.style.minHeight = `${required}px`;
     setSpacerHeight(required);
 
+    programmaticScrollRef.current = true;
+
     if (smooth) {
-      container.scrollTo({ top: desired, behavior: "smooth" });
+      container.scrollTo({ top: desired, behavior: "smooth" }); 
+      setTimeout(() => {
+        programmaticScrollRef.current = false;
+      }, 500);
     } else {
       container.scrollTop = desired;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          programmaticScrollRef.current = false;
+        });
+      });
     }
 
     if (required <= 0) pinnedRef.current = false;
   }, []);
+
+  const updateSpacerNatural = useCallback(() => {
+    const container = containerRef.current;
+    const spacerEl = spacerRef.current;
+    if (!container || !spacerEl) return;
+
+    const desired = targetScrollTopRef.current;
+    const contentHeightWithoutSpacer = spacerEl.offsetTop;
+    const clientHeight = container.clientHeight;
+    const required = Math.max(
+      0,
+      desired + clientHeight - contentHeightWithoutSpacer,
+    );
+
+    spacerEl.style.height = `${required}px`;
+    spacerEl.style.minHeight = `${required}px`;
+    setSpacerHeight(required);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    checkIfAtBottom();
+    if (programmaticScrollRef.current) return;
+    if (pinnedRef.current) pinnedRef.current = false;
+  }, [checkIfAtBottom]);
   
   useEffect(() => {
   if (hasInitializedRef.current) return;
@@ -96,9 +130,11 @@ export function MessageList({ messages }: MessageListProps) {
     }
 
     if (pinnedRef.current) {
-      enforcePin(false); 
+      enforcePin(false);
+    } else {
+      updateSpacerNatural();
     }
-  }, [messages, lastUserMessage, enforcePin]);
+  }, [messages, lastUserMessage, enforcePin, updateSpacerNatural]);
  
   useEffect(() => {
     checkIfAtBottom();
@@ -107,7 +143,7 @@ export function MessageList({ messages }: MessageListProps) {
   return (
     <div
       ref={containerRef}
-      onScroll={checkIfAtBottom}
+       onScroll={handleScroll}
       className="overflow-y-auto w-full max-w-4xl mx-auto flex flex-col pt-13 h-full"
     >
       {messages.map((message, index) => {
