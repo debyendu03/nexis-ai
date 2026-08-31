@@ -43,7 +43,7 @@ export function NewChatButton({ onClick }: { onClick: () => void }) {
           </button>
         ) : (
           <span className="whitespace-nowrap">
-            <a
+            <a href=""
               role="button"
               tabIndex={0}
               onClick={handleSignInClick} 
