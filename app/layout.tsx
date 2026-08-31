@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className="h-dvh w-full flex text-content-primary overflow-hidden relative">
+        <body className="h-dvh w-full flex text-content-primary overflow-hidden relative transition-all">
           <ThemeProvider>
             <GuestSessionGuard />
             <SidebarBackdrop />

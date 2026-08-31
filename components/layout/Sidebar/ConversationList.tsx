@@ -37,7 +37,7 @@ export function ConversationList({
       </div>
       <div className="flex-1 overflow-y-auto px-2 pb-1 scrollbar-themed">
         {conversations.length === 0 ? (
-          <div className="px-3 py-8 text-center text-sm text-content-secondary">
+          <div className="px-3 py-8 text-center text-sm font-medium text-content-secondary">
             {searchQuery ? "No matching chats." : "No conversations yet."}
           </div>
         ) : (

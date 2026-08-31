@@ -61,7 +61,7 @@ export function Sidebar() {
       <aside
         className={clsx(
           "h-dvh bg-sidebar flex flex-col shrink-0 select-none z-30 overflow-hidden",
-          "fixed inset-y-0 left-0 w-[80%] max-w-[320px] transition-transform duration-300",
+          "fixed inset-y-0 left-0 w-[80%] max-w-[320px] transition-all duration-300",
           isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full",
           "md:static md:translate-x-0",
           isSidebarOpen ? "md:w-[30%]" : "md:w-14",
