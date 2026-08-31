@@ -7,6 +7,9 @@ import { Message } from "@/types";
 import { createConversation, saveMessage, getMessages } from "@/lib/supabase";
 import { useGuestSession } from "./useGuestSession";
 
+const CHARS_PER_SECOND = 120;
+const UPDATE_INTERVAL_MS = 40; 
+
 export function useChat(conversationId: string | null) {
   const { user, isSignedIn } = useUser();
   const router = useRouter();
@@ -107,6 +110,7 @@ export function useChat(conversationId: string | null) {
           role: "assistant",
           content: "",
           created_at: new Date().toISOString(),
+          isStreaming: true,
         };
         addMessage(finalConversationId, assistantPlaceholder);
 
@@ -127,15 +131,61 @@ export function useChat(conversationId: string | null) {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let fullAssistantContent = "";
+        let displayedLength = 0;
+        let streamComplete = false;
+        let animationFrameId: number | null = null;
+        let resolveAnimation: (() => void) | null = null;
+        let lastUpdateTime = 0;
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          fullAssistantContent += decoder.decode(value, { stream: true });
-          updateMessage(finalConversationId, assistantMessageId, {
-            content: fullAssistantContent,
-          });
+        const animationFinished = new Promise<void>((resolve) => {
+          resolveAnimation = resolve;
+        });
+
+        const startTime = performance.now();
+        const tick = (timestamp: number) => {
+          const targetLength = Math.min(
+            fullAssistantContent.length,
+            Math.floor(((timestamp - startTime) / 1000) * CHARS_PER_SECOND),
+          );
+
+          if (targetLength > displayedLength && timestamp - lastUpdateTime >= UPDATE_INTERVAL_MS) {
+            displayedLength = targetLength;
+            lastUpdateTime = timestamp;
+            updateMessage(finalConversationId, assistantMessageId, {
+              content: fullAssistantContent.slice(0, displayedLength),
+              isStreaming: true,
+            });
+          }
+
+          if (streamComplete && displayedLength >= fullAssistantContent.length) {
+            resolveAnimation?.();
+            return;
+          }
+
+          animationFrameId = requestAnimationFrame(tick);
+        };
+
+        animationFrameId = requestAnimationFrame(tick);
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            fullAssistantContent += decoder.decode(value, { stream: true });
+          }
+          fullAssistantContent += decoder.decode();
+          streamComplete = true;
+          await animationFinished;
+        } finally {
+          if (animationFrameId !== null) {
+            cancelAnimationFrame(animationFrameId);
+          }
         }
+
+        updateMessage(finalConversationId, assistantMessageId, {
+          content: fullAssistantContent,
+          isStreaming: false,
+        });
 
         if (isSignedIn && fullAssistantContent) {
           await saveMessage(
@@ -149,17 +199,18 @@ export function useChat(conversationId: string | null) {
           saveGuestMessages(finalConversationId, [
             ...messages,
             userMessage,
-            { ...assistantPlaceholder, content: fullAssistantContent },
+            {
+              ...assistantPlaceholder,
+              content: fullAssistantContent,
+              isStreaming: false,
+            },
           ]);
         }
-      } catch (error) {
-        addMessage(finalConversationId, {
-          id: crypto.randomUUID(),
-          conversation_id: finalConversationId,
-          role: "assistant",
+      } catch {
+        updateMessage(finalConversationId, assistantMessageId, {
           content:
             "Sorry, I encountered an error. Please check your connection and try again.",
-          created_at: new Date().toISOString(),
+          isStreaming: false,
         });
       } finally {
         setLoading(false);

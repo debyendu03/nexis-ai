@@ -1,6 +1,7 @@
 'use client';
 
 import ReactMarkdown from 'react-markdown';
+import { memo } from 'react';
 import remarkGfm from 'remark-gfm';
 import { CodeBlock } from './CodeBlock';
 
@@ -8,7 +9,7 @@ interface MarkdownRendererProps {
   content: string;
 }
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+function MarkdownRendererComponent({ content }: MarkdownRendererProps) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -95,3 +96,5 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     </ReactMarkdown>
   );
 }
+
+export const MarkdownRenderer = memo(MarkdownRendererComponent);

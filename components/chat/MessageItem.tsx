@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { Message } from "@/types";
 import { MarkdownRenderer } from "./MarkdownRenderer";
 
@@ -12,7 +13,7 @@ export function MessageItem({ message }: MessageItemProps) {
 
   return (
     <div
-      className={`w-full py-3 sm:py-4 px-4 md:px-6 sm:px-6 flex gap-3 sm:gap-4 transition-colors ${
+      className={`w-full py-3 sm:py-4 px-4 md:px-6 sm:px-6 flex gap-3 sm:gap-4 ${
         isUser ? "justify-end" : "justify-start"
       }`}
     >
@@ -26,7 +27,7 @@ export function MessageItem({ message }: MessageItemProps) {
       ) : (
         // ── Assistant Bubble──
         <div className="max-w-[100%]">
-          <div className="py-4">
+          <div className={`py-4 ${message.isStreaming ? "streaming-fade-in" : ""}`}>
             {message.content ? (
               <MarkdownRenderer content={message.content} />
             ) : (
@@ -43,3 +44,5 @@ export function MessageItem({ message }: MessageItemProps) {
     </div>
   );
 }
+
+export const MemoizedMessageItem = memo(MessageItem);

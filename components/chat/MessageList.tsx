@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback, useState } from "react";
 import { Message } from "@/types";
-import { MessageItem } from "./MessageItem";
+import { MemoizedMessageItem } from "./MessageItem";
 import { useUIStore } from "@/store/useUIStore";
 
 const SCROLL_OFFSET = 60; 
@@ -120,7 +120,7 @@ export function MessageList({ messages }: MessageListProps) {
               if (isThisTheLastUserMessage) lastUserMessageRef.current = el;
             }}
           >
-            <MessageItem message={message} />
+            <MemoizedMessageItem message={message} />
           </div>
         );
       })}
