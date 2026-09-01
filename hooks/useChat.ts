@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
@@ -44,7 +44,10 @@ export function useChat(conversationId: string | null) {
     })),
   );
 
-  const messages = messagesByConversation[conversationId || ""] || [];
+  const messages = useMemo(
+  () => messagesByConversation[conversationId || ""] || [],
+  [messagesByConversation, conversationId],
+  );
 
   const loadMessages = useCallback(
     async (conversationId: string) => {
