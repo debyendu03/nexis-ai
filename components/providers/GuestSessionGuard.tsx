@@ -20,7 +20,7 @@ export function GuestSessionGuard() {
     sessionStorage.removeItem(GUEST_STORAGE_KEY);
 
     if (pathname !== "/") router.replace("/");
-    
-  }, [isLoaded, isSignedIn]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, isSignedIn, router]);
   return null;
 }
