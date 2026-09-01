@@ -40,7 +40,7 @@ export function useConversations(conversationId: string | null) {
     } finally {
       setConversationsLoading(false);
     }
-  }, [isSignedIn, user, setConversations]);
+  }, [isSignedIn, user, setConversations, setConversationsLoading]);
 
   const removeConversation = useCallback(
     async (targetId: string) => {
