@@ -70,8 +70,9 @@ export default function DynamicChatPage({ params }: DynamicChatPageProps) {
       }
     };
 
-    init();
-  }, [id, isLoaded, isSignedIn, user]);
+      init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isLoaded, isSignedIn, user, addConversation, getGuestMessages, loadMessages, migrateGuestConversation, setMessages]);
 
   useEffect(() => {
     if (showAuthModal) {
