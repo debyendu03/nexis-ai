@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 
 export function EmptyState() {
   return (
@@ -8,10 +9,10 @@ export function EmptyState() {
       {/* ── Center Spark Icon & Welcome Header ── */}
       <div className="flex flex-col items-center text-center">
         <div className="w-14 h-14 flex items-center justify-center mb-2">
-          <img src="/nexis-logo.png" alt="Nexis logo" />
+          <Image src="/nexis-logo.png" alt="Nexis logo" width={60} height={60} />
         </div>
         <h2 className="text-3xl  font-bold tracking-tight text-content-primary mb-2">
-          Hello! I'm Nexis 
+          Hello! I&apos;m Nexis
         </h2>
         <p className="text-sm text-content-secondary max-w-md"> 
           How can I help you today?
