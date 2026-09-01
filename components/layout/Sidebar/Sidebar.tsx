@@ -131,6 +131,7 @@ export function Sidebar() {
               onSelect={handleSelectConversation}
               onDelete={handleDelete}
               isSearchModalOpen={isSearchModalOpen}
+              isLoadingConversations={isLoading}
             />
           </div>
         </Modal>
