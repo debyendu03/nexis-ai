@@ -1,7 +1,7 @@
 'use client';
 
 import ReactMarkdown from 'react-markdown';
-import { memo } from 'react';
+import { memo, type ComponentPropsWithoutRef } from 'react';
 import remarkGfm from 'remark-gfm';
 import { CodeBlock } from './CodeBlock';
 
@@ -15,7 +15,7 @@ function MarkdownRendererComponent({ content }: MarkdownRendererProps) {
       remarkPlugins={[remarkGfm]}
       components={{
         // Code blocks vs inline code
-        code({ node, inline, className, children, ...props }: any) {
+        code({ inline, className, children, ...props }: ComponentPropsWithoutRef<'code'> & { inline?: boolean }){
           const match = /language-(\w+)/.exec(className || '');
           const codeText = String(children).replace(/\n$/, '');
 
