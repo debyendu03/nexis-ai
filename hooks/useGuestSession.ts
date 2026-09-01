@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Message } from "@/types";
+import { Message, Conversation } from "@/types";
 import { createConversation, saveMessage } from "@/lib/supabase";
 
 const GUEST_LIMIT = 5;
@@ -40,7 +40,7 @@ export function useGuestSession() {
       userId: string,
       targetConversationId: string,
       onMigrated: (conversationId: string, messages: Message[]) => void,
-      onConversationCreated: (conv: any) => void,
+      onConversationCreated: (conv: Conversation) => void,
     ): Promise<boolean> => {
       const saved = sessionStorage.getItem(GUEST_MESSAGES_KEY);
       if (!saved) return false;
