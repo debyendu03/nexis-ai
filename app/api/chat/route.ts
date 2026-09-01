@@ -94,11 +94,9 @@ export async function   POST(req: NextRequest) {
         "Transfer-Encoding": "chunked",
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Chat API Error:", error);
-    return NextResponse.json(
-      { error: error?.message || "Failed to process chat request" },
-      { status: 500 },
-    );
+    const message = error instanceof Error ? error.message : "Failed to process chat request";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
