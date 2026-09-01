@@ -32,6 +32,26 @@ export async function getConversations(userId: string): Promise<Conversation[]> 
   }
 }
 
+/* Check if a conversation exists and belongs to this user */
+export async function getConversation(
+  conversationId: string,
+  userId: string
+): Promise<Conversation | null> {
+  try {
+    const { data, error } = await supabase
+      .from('conversations')
+      .select('*')
+      .eq('id', conversationId)
+      .eq('user_id', userId)
+      .single();
+
+    if (error) return null;
+    return data as Conversation;
+  } catch {
+    return null;
+  }
+}
+
 /* Create a new conversation record in Supabase */
 export async function createConversation(
   id: string,  

@@ -15,20 +15,12 @@ export function GuestSessionGuard() {
   useEffect(() => {
     if (!isLoaded) return;
     if (isSignedIn) return;
+ 
+    sessionStorage.removeItem(GUEST_MESSAGES_KEY);
+    sessionStorage.removeItem(GUEST_STORAGE_KEY);
 
-    const navEntries = performance.getEntriesByType(
-      "navigation",
-    ) as PerformanceNavigationTiming[];
-    const isReload = navEntries[0]?.type === "reload";
-
-    if (isReload) {
-      sessionStorage.removeItem(GUEST_MESSAGES_KEY);
-      sessionStorage.removeItem(GUEST_STORAGE_KEY);
-
-      if (pathname !== "/") {
-        router.replace("/");
-      }
-    }
+    if (pathname !== "/") router.replace("/");
+    
   }, [isLoaded, isSignedIn]);
   return null;
 }

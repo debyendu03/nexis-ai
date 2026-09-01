@@ -69,11 +69,28 @@ export function useGuestSession() {
     [],
   );
 
+  const getGuestMessages = useCallback(
+    (conversationId: string): Message[] => {
+      const saved = sessionStorage.getItem(GUEST_MESSAGES_KEY);
+      if (!saved) return [];
+      try {
+        const { conversationId: savedId, messages: savedMessages } =
+          JSON.parse(saved);
+        if (savedId !== conversationId) return [];
+        return savedMessages;
+      } catch {
+        return [];
+      }
+    },
+    [],
+  );
+
   return {
     showAuthModal,
     setShowAuthModal,
     checkGuestLimit,
     saveGuestMessages,
     migrateGuestConversation,
+    getGuestMessages,
   };
 }
