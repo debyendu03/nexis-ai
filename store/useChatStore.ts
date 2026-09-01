@@ -5,6 +5,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   // Initial state
   conversations: [],
   isLoading: false,
+  isConversationsLoading: false,
   isStreaming: false,
   messagesByConversation: {},
 
@@ -29,6 +30,7 @@ export const useChatStore = create<ChatStore>((set) => ({
     })),
 
   setLoading: (isLoading: boolean) => set({ isLoading }),
+   setConversationsLoading: (isConversationsLoading: boolean) => set({ isConversationsLoading }),
 
   setStreaming: (isStreaming: boolean) => set({ isStreaming }),
 

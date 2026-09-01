@@ -22,7 +22,7 @@ export function Sidebar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-  const { conversations, fetchConversations, removeConversation } = useConversations(currentId);
+  const { conversations, fetchConversations, removeConversation, isLoading } = useConversations(currentId);
 
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
   const isMobileSidebarOpen = useUIStore((state) => state.isMobileSidebarOpen);
@@ -102,6 +102,7 @@ export function Sidebar() {
             searchQuery={searchQuery}
             onSelect={handleSelectConversation}
             onDelete={handleDelete}
+            isLoadingConversations={isLoading}
           />
 
           {/* User */}

@@ -22,6 +22,7 @@ export interface ChatStore {
   // State
   conversations: Conversation[]; 
   isLoading: boolean;
+  isConversationsLoading: boolean;
   isStreaming: boolean;
   messagesByConversation: Record<string, Message[]>;
 
@@ -32,6 +33,7 @@ export interface ChatStore {
   updateConversationTitle: (id: string, title: string) => void;
   deleteConversation: (id: string) => void;
   setLoading: (loading: boolean) => void;
+  setConversationsLoading: (loading: boolean) => void; 
   setStreaming: (streaming: boolean) => void;
   setMessages: (conversationId: string, messages: Message[]) => void;
   addMessage: (conversationId: string, message: Message) => void;

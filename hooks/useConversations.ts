@@ -18,27 +18,27 @@ export function useConversations(conversationId: string | null) {
     setConversations,
     deleteConversation,
     updateConversationTitle,
-    isLoading,
-    setLoading,
+    isConversationsLoading,
+    setConversationsLoading,
   } = useChatStore(
     useShallow((state) => ({
       conversations: state.conversations,
       setConversations: state.setConversations,
       deleteConversation: state.deleteConversation,
       updateConversationTitle: state.updateConversationTitle,
-      isLoading: state.isLoading,
-      setLoading: state.setLoading,
+      isConversationsLoading: state.isConversationsLoading,
+      setConversationsLoading: state.setConversationsLoading,
     })),
   );
 
   const fetchConversations = useCallback(async () => {
     if (!isSignedIn || !user) return;
-    setLoading(true);
+    setConversationsLoading(true);
     try {
       const data = await getConversations(user.id);
       setConversations(data);
     } finally {
-      setLoading(false);
+      setConversationsLoading(false);
     }
   }, [isSignedIn, user, setConversations]);
 
@@ -72,7 +72,7 @@ export function useConversations(conversationId: string | null) {
 
   return {
     conversations,
-    isLoading,
+    isLoading: isConversationsLoading,
     fetchConversations,
     removeConversation,
     renameConversation,
